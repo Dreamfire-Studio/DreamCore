@@ -10,20 +10,22 @@
     <name>DreamCore</name>
     <packaging>jar</packaging>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <url>https://github.com/Dreamfire-Studio/DreamCore</url>
-        </repository>
-    </distributionManagement>
-
     <properties>
+        <github.owner>Dreamfire-Studio</github.owner>
+        <github.server.id>github</github.server.id>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>${github.server.id}</id>
+            <url>https://maven.pkg.github.com/${github.owner}/${project.name}</url>
+        </repository>
+    </distributionManagement>
 
     <pluginRepositories>
         <pluginRepository>
@@ -33,6 +35,10 @@
     </pluginRepositories>
 
     <repositories>
+        <repository>
+            <id>${github.server.id}</id>
+            <url>https://maven.pkg.github.com/${github.owner}/${project.name}</url>
+        </repository>
         <repository>
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
