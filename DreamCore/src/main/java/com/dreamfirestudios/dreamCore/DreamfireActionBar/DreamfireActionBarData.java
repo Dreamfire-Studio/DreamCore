@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import java.util.function.Function;
 
-public record DreamfireActionBarData(Function<Player, String> messageProvider) {
+public record  DreamfireActionBarData(Function<Player, String> messageProvider) {
 
     /**
      * Displays the action bar for a given player.
