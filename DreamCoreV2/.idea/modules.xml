@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/API/API.iml" filepath="$PROJECT_DIR$/API/API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DreamCoreV2.iml" filepath="$PROJECT_DIR$/DreamCoreV2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PLUGIN/PLUGIN.iml" filepath="$PROJECT_DIR$/PLUGIN/PLUGIN.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v1_21_R1/v1_21_R1.iml" filepath="$PROJECT_DIR$/v1_21_R1/v1_21_R1.iml" />
+    </modules>
+  </component>
+</project>
