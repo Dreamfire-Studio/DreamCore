@@ -30,35 +30,35 @@ public class DreamLuckPerms {
     }
 
     public static User getUser(Player player){
-        return DreamCore.GetLuckPerms().getPlayerAdapter(Player.class).getUser(player);
+        return DreamCore.LuckPerms.getPlayerAdapter(Player.class).getUser(player);
     }
 
     public static User getUser(UUID playerUUID){
-        return DreamCore.GetLuckPerms().getUserManager().getUser(playerUUID);
+        return DreamCore.LuckPerms.getUserManager().getUser(playerUUID);
     }
 
     public static <T extends Enum<T>> Group getGroup(T groupName){
-        return DreamCore.GetLuckPerms().getGroupManager().getGroup(groupName.toString());
+        return DreamCore.LuckPerms.getGroupManager().getGroup(groupName.toString());
     }
 
     public static <T extends Enum<T>> void addPermission(User user, T permission){
         user.data().add(Node.builder(permission.toString()).build());
-        DreamCore.GetLuckPerms().getUserManager().saveUser(user);
+        DreamCore.LuckPerms.getUserManager().saveUser(user);
     }
 
     public static <T extends Enum<T>> void addPermission(UUID playerUUID, T permission){
-        DreamCore.GetLuckPerms().getUserManager().modifyUser(playerUUID, user -> {
+        DreamCore.LuckPerms.getUserManager().modifyUser(playerUUID, user -> {
             user.data().add(Node.builder(permission.toString()).build());
         });
     }
 
     public static void addPermission(User user, Node node){
         user.data().add(node);
-        DreamCore.GetLuckPerms().getUserManager().saveUser(user);
+        DreamCore.LuckPerms.getUserManager().saveUser(user);
     }
 
     public static void addPermission(UUID playerUUID, Node node){
-        DreamCore.GetLuckPerms().getUserManager().modifyUser(playerUUID, user -> {
+        DreamCore.LuckPerms.getUserManager().modifyUser(playerUUID, user -> {
             user.data().add(node);
         });
     }
