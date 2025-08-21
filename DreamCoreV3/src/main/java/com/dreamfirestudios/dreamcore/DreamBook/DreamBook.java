@@ -247,6 +247,7 @@ public class DreamBook extends DreamClassID {
             DreamBook dreamfireBook = new DreamBook();
             if (!pages.isEmpty()) bookMeta.setPages(pages);
             book.setItemMeta(bookMeta);
+
             dreamfireBook.book = book;
             dreamfireBook.bookMeta = bookMeta;
             dreamfireBook.pages.addAll(pages);
