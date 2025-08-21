@@ -11,7 +11,8 @@ import java.util.UUID;
 @PulseAutoRegister
 public class UUIDTest implements DreamfireVariableTest {
     @Override
-    public PersistentDataTypes PersistentDataType() { return PersistentDataTypes.STRING; }
+    public PersistentDataTypes PersistentDataType() {
+        return PersistentDataTypes.STRING; }
 
     @Override
     public boolean IsType(Object variable) {
