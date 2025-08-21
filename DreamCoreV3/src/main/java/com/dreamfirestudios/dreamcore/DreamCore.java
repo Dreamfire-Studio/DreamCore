@@ -1,6 +1,7 @@
 package com.dreamfirestudios.dreamcore;
 
 import com.dreamfirestudios.dreamcore.DreamActionBar.DreamActionBar;
+import com.dreamfirestudios.dreamcore.DreamBook.DreamBook;
 import com.dreamfirestudios.dreamcore.DreamVariable.DreamVariableTest;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -16,7 +17,8 @@ public class DreamCore extends JavaPlugin {
     private static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager DreamfireStorageManager;
 
     public static final LinkedHashMap<UUID, DreamActionBar> DreamActionBars = new LinkedHashMap<>();
-    public final LinkedHashMap<Class<?>, DreamVariableTest> DreamVariableTests = new LinkedHashMap<>();
+    public static final LinkedHashMap<Class<?>, DreamVariableTest> DreamVariableTests = new LinkedHashMap<>();
+    public static final LinkedHashMap<UUID, DreamBook> DreamBooks = new LinkedHashMap<>();
 
     public static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager GetDreamfireStorageManager(){return DreamfireStorageManager;}
 

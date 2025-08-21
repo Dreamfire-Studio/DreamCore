@@ -3,6 +3,8 @@ package com.dreamfirestudios.dreamcore.DreamBook;
 import com.dreamfirestudios.dreamcore.DreamChat.DreamMessageFormatter;
 import com.dreamfirestudios.dreamcore.DreamChat.DreamMessageSettings;
 import com.dreamfirestudios.dreamcore.DreamCore;
+import com.dreamfirestudios.dreamcore.DreamJava.DreamClassID;
+import com.dreamfirestudios.dreamcore.DreamPersistentData.DreamPersistentItemStack;
 import lombok.Getter;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -24,12 +26,11 @@ import java.util.*;
  /// Fires events when the book is opened/closed, pages change, or viewers list changes.
  /// </remarks>
  */
-public class DreamBook {
+public class DreamBook extends DreamClassID {
 
     /// <summary>Persistent key for tagging book items in NBT.</summary>
     public static final String DreamfireBookKey = "DreamfireBook";
 
-    @Getter private UUID bookID;
     @Getter private ItemStack book;
     @Getter private BookMeta bookMeta;
 
@@ -188,7 +189,6 @@ public class DreamBook {
      /// </summary>
      */
     public static class BookBuilder {
-        private final UUID bookID = UUID.randomUUID();
         private final ItemStack book;
         private final BookMeta bookMeta;
         private final List<String> pages = new ArrayList<>();
@@ -247,20 +247,17 @@ public class DreamBook {
             DreamBook dreamfireBook = new DreamBook();
             if (!pages.isEmpty()) bookMeta.setPages(pages);
             book.setItemMeta(bookMeta);
-
-            dreamfireBook.bookID = bookID;
             dreamfireBook.book = book;
             dreamfireBook.bookMeta = bookMeta;
             dreamfireBook.pages.addAll(pages);
-
-            DreamfirePersistentItemStack.Add(
-                    DreamCore.GetDreamfireCore(),
+            DreamPersistentItemStack.Add(
+                    DreamCore.DreamCore,
                     book,
                     PersistentDataType.STRING,
                     DreamfireBookKey,
-                    bookID.toString()
+                    dreamfireBook.getClassID().toString()
             );
-            DreamCore.GetDreamfireCore().AddBookBuilder(bookID, dreamfireBook);
+            DreamCore.DreamBooks.put(dreamfireBook.getClassID(), dreamfireBook);
             return dreamfireBook;
         }
     }
