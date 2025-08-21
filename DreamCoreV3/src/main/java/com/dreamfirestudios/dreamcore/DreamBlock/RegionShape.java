@@ -1,4 +1,4 @@
-package com.dreamfirestudios.dreamcore.DreamfireBlock;
+package com.dreamfirestudios.dreamcore.DreamBlock;
 
 /// <summary>
 /// Defines the supported region shapes for block operations.

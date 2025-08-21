@@ -1,4 +1,4 @@
-package com.dreamfirestudios.dreamcore.DreamfireBlock;
+package com.dreamfirestudios.dreamcore.DreamBlock;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 /// Utility class for synchronous and asynchronous block operations
 /// in a defined radius and shape (cube or sphere).
 /// </summary>
-public class DreamfireBlock {
+public class DreamBlock {
 
     // ============================================================
     // Synchronous Methods
