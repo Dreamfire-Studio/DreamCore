@@ -20,7 +20,7 @@ import java.util.Map;
  * and {@link #stop()} to control the lifecycle. This class uses per-tick calls to update frames; it does not schedule itself.
  * </remarks>
  */
-public class DreamfireBlockMask {
+public class DreamBlockMask {
 
     private Player player;
 
@@ -41,7 +41,7 @@ public class DreamfireBlockMask {
     @Getter
     private volatile boolean actionBarPaused = true;
 
-    private DreamfireBlockMask() {}
+    private DreamBlockMask() {}
 
     // ----------------------------- Mutation helpers -----------------------------
 
@@ -160,7 +160,7 @@ public class DreamfireBlockMask {
      * </summary>
      * <returns>The removed mask instance from DreamCore (as confirmation).</returns>
      */
-    public DreamfireBlockMask stop(){
+    public DreamBlockMask stop(){
         actionBarPaused = true;
         player.sendBlockChanges(lastFrameBlockStates.values());
         player.sendBlockChanges(visitedTrailLocations.values());
@@ -186,7 +186,7 @@ public class DreamfireBlockMask {
     // ----------------------------- Builder -----------------------------
 
     /**
-     * <summary>Fluent builder for {@link DreamfireBlockMask}.</summary>
+     * <summary>Fluent builder for {@link DreamBlockMask}.</summary>
      */
     public static class Builder {
 
@@ -286,7 +286,7 @@ public class DreamfireBlockMask {
          * <param name="player">Target player.</param>
          * <returns>The created/existing mask stored in {@link DreamCore}.</returns>
          */
-        public DreamfireBlockMask CreateMask(Player player){
+        public DreamBlockMask CreateMask(Player player){
             if (player == null) throw new IllegalArgumentException("Player cannot be null.");
             var stored = DreamCore.GetDreamfireCore().GetBlockMask(player.getUniqueId());
             if (stored != null){
@@ -294,7 +294,7 @@ public class DreamfireBlockMask {
                 return stored;
             }
 
-            DreamfireBlockMask mask = new DreamfireBlockMask();
+            DreamBlockMask mask = new DreamBlockMask();
             mask.player = player;
             mask.deleteMaskOnNull = deleteMaskOnNull;
             mask.resetLastFrames = resetLastFrames;

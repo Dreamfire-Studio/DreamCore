@@ -18,11 +18,11 @@ public class BlockMaskFrameAppliedEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Player player;
-    private final DreamfireBlockMask mask;
+    private final DreamBlockMask mask;
     private final Map<org.bukkit.util.Vector, BlockState> appliedStates;
 
     public BlockMaskFrameAppliedEvent(Player player,
-                                      DreamfireBlockMask mask,
+                                      DreamBlockMask mask,
                                       Map<org.bukkit.util.Vector, BlockState> appliedStates) {
         this.player = player;
         this.mask = mask;
