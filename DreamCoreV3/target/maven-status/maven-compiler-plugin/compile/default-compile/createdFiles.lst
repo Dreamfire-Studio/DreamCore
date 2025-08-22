@@ -2,11 +2,13 @@ com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockCreatedEvent.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskCreateEvent.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskPausedEvent.class
+com\dreamfirestudios\dreamcore\DreamHologram\HologramUpdateEvent.class
 com\dreamfirestudios\dreamcore\DreamVariable\DreamVariableTest.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\DreamPersistentEntity.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\BlockDisplayAnimator.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookViewerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPlayerAddedEvent.class
+com\dreamfirestudios\dreamcore\DreamHologram\DreamHologram$HologramBuilder.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandSpawnEvent.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPlayerLeaveEvent.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamChat.class
@@ -22,15 +24,18 @@ com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockObserverAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\StorageObjectAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamJava\DreamfireClassAPI.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackRemovedEvent.class
+com\dreamfirestudios\dreamcore\DreamHologram\HologramRemoveLineEvent.class
 com\dreamfirestudios\dreamcore\DreamCam\DreamCamPathRunnable.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\DreamEntityMask.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarAPI.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskFrameComputedEvent.class
 com\dreamfirestudios\dreamcore\DreamVanish\VanishHideTargetEvent.class
+com\dreamfirestudios\dreamcore\DreamHologram\HologramSpawnEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookViewerRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockUpdatedEvent.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaUtil\UUIDTest.class
+com\dreamfirestudios\dreamcore\DreamHologram\HologramDeleteEvent.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskFrameAppliedEvent.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarPausedEvent.class
 com\dreamfirestudios\dreamcore\DreamCam\DreamCamPath.class
@@ -42,6 +47,7 @@ com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPaused.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandPosedEvent.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamMessageFormatter.class
 com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantWrapper.class
+com\dreamfirestudios\dreamcore\DreamHologram\HologramAddLineEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandPose.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamMessageSettings.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBarData.class
@@ -51,6 +57,7 @@ com\dreamfirestudios\dreamcore\DreamBlockDisplay\DreamBlockDisplay$BlockDisplayB
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskStartedEvent.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskStoppedEvent.class
 com\dreamfirestudios\dreamcore\DreamJava\DreamClassID.class
+com\dreamfirestudios\dreamcore\DreamHologram\DreamHologram.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\BlockDisplayCreatedEvent.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\FloatTest.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\DreamFakeBlockAPI.class
@@ -69,6 +76,7 @@ com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentEntityRemovedEvent.
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBar.class
 com\dreamfirestudios\dreamcore\DreamVariable\DreamAbstractVariableTest.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockClearedEvent.class
+com\dreamfirestudios\dreamcore\DreamHologram\HologramEditLineEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandEqippedEvent.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookPagesUpdatedEvent.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarFrameAdvancedEvent.class
@@ -118,4 +126,5 @@ com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\BoolTest.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\DreamfireStorageObject.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentDataTypes.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandAnimationFrameData.class
+com\dreamfirestudios\dreamcore\DreamHead\DreamHead.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\DreamPersistentItemStack.class

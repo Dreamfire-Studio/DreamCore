@@ -8,6 +8,7 @@ import com.dreamfirestudios.dreamcore.DreamCam.DreamCamPath;
 import com.dreamfirestudios.dreamcore.DreamEnchantment.IDreamEnchantment;
 import com.dreamfirestudios.dreamcore.DreamEntityMask.DreamEntityMask;
 import com.dreamfirestudios.dreamcore.DreamFakeBlock.DreamFakeBlock;
+import com.dreamfirestudios.dreamcore.DreamHologram.DreamHologram;
 import com.dreamfirestudios.dreamcore.DreamVariable.DreamVariableTest;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -34,6 +35,7 @@ public class DreamCore extends JavaPlugin {
     public static final LinkedHashMap<UUID, List<UUID>> DreamVanishs = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, DreamEntityMask> DreamEntityMasks = new LinkedHashMap<>();
     public static final LinkedHashMap<String, DreamFakeBlock> DreamFakeBlocks = new LinkedHashMap<>();
+    public static final LinkedHashMap<UUID, DreamHologram> DreamHolograms = new LinkedHashMap<>();
 
     public static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager GetDreamfireStorageManager(){return DreamfireStorageManager;}
 
