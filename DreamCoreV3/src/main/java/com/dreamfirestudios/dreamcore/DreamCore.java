@@ -14,6 +14,7 @@ import com.dreamfirestudios.dreamcore.DreamLoop.IDreamLoop;
 import com.dreamfirestudios.dreamcore.DreamPlaceholder.DreamPlaceholderManager;
 import com.dreamfirestudios.dreamcore.DreamScoreboard.DreamScoreboard;
 import com.dreamfirestudios.dreamcore.DreamVariable.DreamVariableTest;
+import com.dreamfirestudios.dreamcore.DreamSmartInvs.SmartInvsPlugin;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.conversations.Conversation;
@@ -28,8 +29,9 @@ public class DreamCore extends JavaPlugin {
 
     public static DreamCore DreamCore;
     public static LuckPerms LuckPerms;
-    public static DreamPlaceholderManager dreamPlaceholderManager;
-    private static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager DreamfireStorageManager;
+    public static DreamPlaceholderManager DreamPlaceholderManager;
+    public static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager DreamfireStorageManager;
+    public static SmartInvsPlugin SmartInvsPlugin;
 
     public static final LinkedHashMap<UUID, DreamActionBar> DreamActionBars = new LinkedHashMap<>();
     public static final LinkedHashMap<Class<?>, DreamVariableTest> DreamVariableTests = new LinkedHashMap<>();
@@ -53,7 +55,8 @@ public class DreamCore extends JavaPlugin {
     public void onEnable() {
         DreamCore = this;
         LuckPerms = LuckPermsProvider.get();
-        dreamPlaceholderManager = new DreamPlaceholderManager("dreamcore", "Dreamfire Studios", "1.0.0");
+        DreamPlaceholderManager = new DreamPlaceholderManager("dreamcore", "Dreamfire Studios", "1.0.0");
+        SmartInvsPlugin = new SmartInvsPlugin(this);
     }
 
     public void OneTickClasses(){
