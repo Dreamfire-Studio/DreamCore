@@ -147,6 +147,7 @@ com\dreamfirestudios\dreamcore\DreamRecipe\IDreamRecipe.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPlayerAdded.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\opener\ChestInventoryOpener.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\IntegerTest.class
+com\dreamfirestudios\dreamcore\DreamTextDisplay\TextDisplaySpawnEvent.class
 com\dreamfirestudios\dreamcore\DreamBlock\RegionShape.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPaused.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandPosedEvent.class
@@ -186,6 +187,7 @@ com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarData.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\SmartInvsPlugin.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBar$Builder.class
 com\dreamfirestudios\dreamcore\DreamRecipe\RecipeType.class
+com\dreamfirestudios\dreamcore\DreamTextDisplay\DreamTextDisplay$TextDisplayBuilder.class
 com\dreamfirestudios\dreamcore\DreamTimer\TimerTickEvent.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterType.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStoppedEvent.class
@@ -207,6 +209,7 @@ com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStartedEvent.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\DreamfireStorageManager.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStand.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\content\InventoryContents$Impl.class
+com\dreamfirestudios\dreamcore\DreamTextDisplay\DreamTextDisplay.class
 com\dreamfirestudios\dreamcore\DreamRecipe\DreamRecipeRegistry.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterLimitHit.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\BoolTest.class
