@@ -19,6 +19,7 @@ com\dreamfirestudios\dreamcore\DreamJava\DreamfireJavaAPI.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamPrompt\DreamPrompt.class
 com\dreamfirestudios\dreamcore\DreamEnchantment\IDreamEnchantment.class
+com\dreamfirestudios\dreamcore\DreamRecipe\IDreamRecipe$1.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBook$BookBuilder.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPointReachedEvent.class
 com\dreamfirestudios\dreamcore\DreamFile\DreamFile.class
@@ -53,6 +54,7 @@ com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskFrameAppliedEvent.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarPausedEvent.class
 com\dreamfirestudios\dreamcore\DreamCam\DreamCamPath.class
 com\dreamfirestudios\dreamcore\DreamInventory\ItemRef.class
+com\dreamfirestudios\dreamcore\DreamRecipe\IDreamRecipe.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPlayerAdded.class
 com\dreamfirestudios\dreamcore\DreamItemDisplay\DreamItemDisplay$ItemDisplayBuilder.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\IntegerTest.class
@@ -127,6 +129,7 @@ com\dreamfirestudios\dreamcore\DreamCam\LookAtType.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\DreamLocationLimiter.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarData.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBar$Builder.class
+com\dreamfirestudios\dreamcore\DreamRecipe\RecipeType.class
 com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantmentRegistry.class
 com\dreamfirestudios\dreamcore\DreamLuckPerms\DreamLuckPerms.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathStartEvent.class
@@ -157,6 +160,7 @@ com\dreamfirestudios\dreamcore\DreamBlockDisplay\BlockDisplayPool.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStand$1.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStand.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\DreamEntityMask$1.class
+com\dreamfirestudios\dreamcore\DreamRecipe\DreamRecipeRegistry.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBar.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterLimitHit.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\BoolTest.class
