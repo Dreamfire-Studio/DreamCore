@@ -6,6 +6,7 @@ com\dreamfirestudios\dreamcore\DreamHologram\HologramUpdateEvent.class
 com\dreamfirestudios\dreamcore\DreamVariable\DreamVariableTest.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\DreamPersistentEntity.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\BlockDisplayAnimator.class
+com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterPlayerRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookViewerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamHologram\DreamHologram$HologramBuilder.class
@@ -14,6 +15,7 @@ com\dreamfirestudios\dreamcore\DreamCam\CamPathPlayerLeaveEvent.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamChat.class
 com\dreamfirestudios\dreamcore\DreamChat\FormatTags.class
 com\dreamfirestudios\dreamcore\DreamJava\DreamfireJavaAPI.class
+com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamEnchantment\IDreamEnchantment.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBook$BookBuilder.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPointReachedEvent.class
@@ -34,7 +36,9 @@ com\dreamfirestudios\dreamcore\DreamHologram\HologramSpawnEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookViewerRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockUpdatedEvent.class
+com\dreamfirestudios\dreamcore\DreamLocation\DreamLocation.class
 com\dreamfirestudios\dreamcore\DreamItemDisplay\ItemDisplaySpawnEvent.class
+com\dreamfirestudios\dreamcore\DreamLocationLimiter\DreamLocationLimiter$LocationLimiterBuilder.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaUtil\UUIDTest.class
 com\dreamfirestudios\dreamcore\DreamHologram\HologramDeleteEvent.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskFrameAppliedEvent.class
@@ -74,6 +78,7 @@ com\dreamfirestudios\dreamcore\DreamBossBar\BossBarStartedEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandGlowEvent.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockObserverRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentBlockAddedEvent.class
+com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterStart.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBook.class
 com\dreamfirestudios\dreamcore\DreamLuckPerms\DreamLuckPerms$GroupResult.class
 com\dreamfirestudios\dreamcore\DreamItems\DreamItemStacks.class
@@ -93,6 +98,7 @@ com\dreamfirestudios\dreamcore\DreamBook\DreamBookOpenEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\DreamPersistentBlock.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandAnimatorData.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathStopEvent.class
+com\dreamfirestudios\dreamcore\DreamLocationLimiter\DreamLocationLimiter$1.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\StorageObjectRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamfireArmorStandBuilder.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandSlot.class
@@ -103,11 +109,13 @@ com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandAnimationFrameDataBuild
 com\dreamfirestudios\dreamcore\DreamFile\DreamDir.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarStopped.class
 com\dreamfirestudios\dreamcore\DreamCam\LookAtType.class
+com\dreamfirestudios\dreamcore\DreamLocationLimiter\DreamLocationLimiter.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarData.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBar$Builder.class
 com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantmentRegistry.class
 com\dreamfirestudios\dreamcore\DreamLuckPerms\DreamLuckPerms.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathStartEvent.class
+com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterType.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStoppedEvent.class
 com\dreamfirestudios\dreamcore\DreamCore.class
 com\dreamfirestudios\dreamcore\DreamVanish\VanishShowTargetEvent.class
@@ -130,6 +138,7 @@ com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStand$1.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStand.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\DreamEntityMask$1.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBar.class
+com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterLimitHit.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\BoolTest.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\DreamfireStorageObject.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentDataTypes.class
