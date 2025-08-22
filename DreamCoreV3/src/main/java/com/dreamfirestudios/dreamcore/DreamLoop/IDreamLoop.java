@@ -3,6 +3,8 @@ package com.dreamfirestudios.dreamcore.DreamLoop;
 import com.dreamfirestudios.dreamcore.DreamCore;
 import org.bukkit.Bukkit;
 
+import java.util.UUID;
+
 /**
  * Contract for repeating loops driven by the Bukkit scheduler.
  * <p>
@@ -18,7 +20,7 @@ public interface IDreamLoop {
     /**
      * Identifier for this loop in the DreamCore registry. By default uses the simple class name.
      */
-    default String ReturnID() { return getClass().getSimpleName(); }
+    UUID ReturnID();
 
     /**
      * Delay before the first {@link #Loop()} call, in ticks.

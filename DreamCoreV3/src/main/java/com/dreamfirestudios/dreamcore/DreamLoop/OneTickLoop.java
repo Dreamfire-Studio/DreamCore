@@ -4,6 +4,8 @@ import com.dreamfirestudios.dreamcore.DreamCore;
 import com.dreamfirestudios.dreamcore.DreamJava.PulseAutoRegister;
 import lombok.Getter;
 
+import java.util.UUID;
+
 /**
  * Fires every tick (1L). Useful for short, lightweight dispatchers.
  */
@@ -14,6 +16,11 @@ public class OneTickLoop implements IDreamLoop {
     @Getter private static final long loopInterval = 1L;
 
     private int loopID = -1;
+
+    @Override
+    public UUID ReturnID() {
+        return UUID.randomUUID();
+    }
 
     @Override public long StartDelay() { return startDelay; }
     @Override public long LoopInterval() { return loopInterval; }

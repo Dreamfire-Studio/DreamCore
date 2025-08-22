@@ -11,7 +11,6 @@ com\dreamfirestudios\dreamcore\DreamJava\DreamfireJavaAPI.class
 com\dreamfirestudios\dreamcore\DreamPrompt\DreamPrompt.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\content\InventoryProvider.class
 com\dreamfirestudios\dreamcore\DreamEnchantment\IDreamEnchantment.class
-com\dreamfirestudios\dreamcore\DreamRecipe\IDreamRecipe$1.class
 com\dreamfirestudios\dreamcore\DreamFile\DreamFile.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentBlockRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamVanish\DreamVanish.class
@@ -41,6 +40,7 @@ com\dreamfirestudios\dreamcore\DreamSmartInvs\ClickableItem.class
 com\dreamfirestudios\dreamcore\DreamPrompt\PromptEndedEvent$EndReason.class
 com\dreamfirestudios\dreamcore\DreamHologram\DreamHologram.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\content\SlotPos.class
+com\dreamfirestudios\dreamcore\DreamJava\DreamClassAPI.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\DreamFakeBlockAPI.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStandAnimator$Builder.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\DreamEntityMask$Builder.class
@@ -84,6 +84,7 @@ com\dreamfirestudios\dreamcore\DreamScoreboard\ScoreboardPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantmentRegistry.class
 com\dreamfirestudios\dreamcore\DreamLuckPerms\DreamLuckPerms.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathStartEvent.class
+com\dreamfirestudios\dreamcore\DreamJava\DreamClassAPI$1.class
 com\dreamfirestudios\dreamcore\DreamMessagingChannel\DreamPluginMessage.class
 com\dreamfirestudios\dreamcore\DreamVanish\VanishShowTargetEvent.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBar$Builder.class
@@ -122,7 +123,6 @@ com\dreamfirestudios\dreamcore\DreamBook\DreamBook$BookBuilder.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPointReachedEvent.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockObserverAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamStopwatch\StopwatchResumedEvent.class
-com\dreamfirestudios\dreamcore\DreamJava\DreamfireClassAPI.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamHologram\HologramRemoveLineEvent.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\content\InventoryContents.class
@@ -213,7 +213,6 @@ com\dreamfirestudios\dreamcore\DreamfireStorage\DreamfireStorageManager.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStand.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\content\InventoryContents$Impl.class
 com\dreamfirestudios\dreamcore\DreamTextDisplay\DreamTextDisplay.class
-com\dreamfirestudios\dreamcore\DreamRecipe\DreamRecipeRegistry.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterLimitHit.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\BoolTest.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\DreamfireStorageObject.class

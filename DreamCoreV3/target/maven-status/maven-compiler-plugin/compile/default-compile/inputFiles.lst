@@ -96,8 +96,8 @@ E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\j
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamItemDisplay\ItemDisplaySpawnEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamItems\DreamItemStacks.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamItems\IDreamItemStack.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamJava\DreamClassAPI.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamJava\DreamClassID.java
-E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamJava\DreamfireClassAPI.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamJava\DreamfireJavaAPI.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamJava\PulseAutoRegister.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamLocation\DreamLocation.java
@@ -134,7 +134,6 @@ E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\j
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\PromptRestartEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\PromptStartedEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamRaycast\DreamRaycast.java
-E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamRecipe\DreamRecipeRegistry.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamRecipe\IDreamRecipe.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamRecipe\RecipeType.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamScoreboard\DreamScoreboard.java

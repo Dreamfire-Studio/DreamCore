@@ -4,6 +4,8 @@ import com.dreamfirestudios.dreamcore.DreamCore;
 import com.dreamfirestudios.dreamcore.DreamJava.PulseAutoRegister;
 import lombok.Getter;
 
+import java.util.UUID;
+
 /**
  * Fires every 20 ticks (~1s). Good for heavier periodic work.
  */
@@ -14,6 +16,11 @@ public class TwentyTickLoop implements IDreamLoop {
     @Getter private static final long loopInterval = 20L; // FIXED: was 1L
 
     private int loopID = -1;
+
+    @Override
+    public UUID ReturnID() {
+        return UUID.randomUUID();
+    }
 
     @Override public long StartDelay() { return startDelay; }
     @Override public long LoopInterval() { return loopInterval; }
