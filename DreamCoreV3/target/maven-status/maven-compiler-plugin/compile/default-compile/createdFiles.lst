@@ -74,6 +74,7 @@ com\dreamfirestudios\dreamcore\DreamFakeBlock\DreamFakeBlockAPI.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStandAnimator$Builder.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\DreamEntityMask$Builder.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarStoppedEvent.class
+com\dreamfirestudios\dreamcore\DreamMessagingChannel\PluginMessageLibrary.class
 com\dreamfirestudios\dreamcore\DreamItemDisplay\DreamItemDisplay.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarStartedEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandGlowEvent.class
@@ -117,6 +118,7 @@ com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantmentRegistry.class
 com\dreamfirestudios\dreamcore\DreamLuckPerms\DreamLuckPerms.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathStartEvent.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterType.class
+com\dreamfirestudios\dreamcore\DreamMessagingChannel\DreamPluginMessage.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStoppedEvent.class
 com\dreamfirestudios\dreamcore\DreamCore.class
 com\dreamfirestudios\dreamcore\DreamVanish\VanishShowTargetEvent.class
@@ -135,7 +137,6 @@ com\dreamfirestudios\dreamcore\DreamBlockMask\DreamBlockMask$Builder.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\DreamBlockDisplay.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStartedEvent.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\DreamfireStorageManager.class
-com\dreamfirestudios\dreamcore\DreamLoop\DreamAbstractLoop.class
 com\dreamfirestudios\dreamcore\DreamJava\PulseAutoRegister.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\BlockDisplayPool.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStand$1.class
