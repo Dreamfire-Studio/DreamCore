@@ -126,6 +126,13 @@ E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\j
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackRemovedEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPlaceholder\DreamPlaceholderManager.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPlaceholder\IDreamPlaceholder.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\DreamPrompt.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\DreamPromptTriplet.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\IDreamPrompt.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\PromptEndedEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\PromptResponseEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\PromptRestartEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\PromptStartedEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVanish\DreamVanish.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVanish\VanishHideTargetEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVanish\VanishShowTargetEvent.java

@@ -15,6 +15,7 @@ import com.dreamfirestudios.dreamcore.DreamPlaceholder.DreamPlaceholderManager;
 import com.dreamfirestudios.dreamcore.DreamVariable.DreamVariableTest;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.conversations.Conversation;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class DreamCore extends JavaPlugin {
     public static final LinkedHashMap<UUID, DreamHologram> DreamHolograms = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, DreamLocationLimiter> DreamLocationLimiters = new LinkedHashMap<>();
     public static final LinkedHashMap<String, IDreamLoop> IDreamLoops = new LinkedHashMap<>();
+    public static final LinkedHashMap<UUID, Conversation> Conversations = new LinkedHashMap<>();
 
     public static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager GetDreamfireStorageManager(){return DreamfireStorageManager;}
 
