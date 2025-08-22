@@ -15,6 +15,7 @@ com\dreamfirestudios\dreamcore\DreamJava\DreamfireJavaAPI.class
 com\dreamfirestudios\dreamcore\DreamEnchantment\IDreamEnchantment.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBook$BookBuilder.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPointReachedEvent.class
+com\dreamfirestudios\dreamcore\DreamFile\DreamFile.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentBlockRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamVanish\DreamVanish.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockObserverAddedEvent.class
@@ -83,6 +84,7 @@ com\dreamfirestudios\dreamcore\DreamBlockMask\DreamBlockMask.class
 com\dreamfirestudios\dreamcore\DreamBlock\DreamBlock.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentEntityAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandAnimationFrameDataBuilder.class
+com\dreamfirestudios\dreamcore\DreamFile\DreamDir.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarStopped.class
 com\dreamfirestudios\dreamcore\DreamCam\LookAtType.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarData.class
