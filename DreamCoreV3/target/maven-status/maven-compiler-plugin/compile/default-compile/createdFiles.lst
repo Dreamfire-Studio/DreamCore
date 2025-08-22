@@ -39,6 +39,7 @@ com\dreamfirestudios\dreamcore\DreamHologram\HologramDeleteEvent.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskFrameAppliedEvent.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarPausedEvent.class
 com\dreamfirestudios\dreamcore\DreamCam\DreamCamPath.class
+com\dreamfirestudios\dreamcore\DreamInventory\ItemRef.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPlayerAdded.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\IntegerTest.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\DoubleTest.class
@@ -50,6 +51,7 @@ com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantWrapper.class
 com\dreamfirestudios\dreamcore\DreamHologram\HologramAddLineEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandPose.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamMessageSettings.class
+com\dreamfirestudios\dreamcore\DreamInventory\DreamInventory.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBarData.class
 com\dreamfirestudios\dreamcore\DreamVariable\DreamVariableTestAPI.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\LongTest.class
@@ -72,6 +74,7 @@ com\dreamfirestudios\dreamcore\DreamBook\DreamBook.class
 com\dreamfirestudios\dreamcore\DreamLuckPerms\DreamLuckPerms$GroupResult.class
 com\dreamfirestudios\dreamcore\DreamCam\DreamCamPath$CamPathBuilder.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPlayed.class
+com\dreamfirestudios\dreamcore\DreamInventory\ItemLocation.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentEntityRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBar.class
 com\dreamfirestudios\dreamcore\DreamVariable\DreamAbstractVariableTest.class
