@@ -16,6 +16,7 @@ com\dreamfirestudios\dreamcore\DreamFile\DreamFile.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentBlockRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamVanish\DreamVanish.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\StorageObjectAddedEvent.class
+com\dreamfirestudios\dreamcore\DreamTitle\DreamTitle.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\content\Pagination$Impl.class
 com\dreamfirestudios\dreamcore\DreamPrompt\PromptResponseEvent.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskFrameComputedEvent.class
@@ -167,6 +168,7 @@ com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\FloatTest.class
 com\dreamfirestudios\dreamcore\DreamScoreboard\DreamScoreboardLines.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarStoppedEvent.class
 com\dreamfirestudios\dreamcore\DreamStopwatch\StopwatchPausedEvent.class
+com\dreamfirestudios\dreamcore\DreamWorld\TimeLock.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandGlowEvent.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockObserverRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentBlockAddedEvent.class
@@ -184,6 +186,7 @@ com\dreamfirestudios\dreamcore\DreamPrompt\PromptStartedEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamfireArmorStandBuilder.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarStopped.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarData.class
+com\dreamfirestudios\dreamcore\DreamWorld\DreamWorld.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\SmartInvsPlugin.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBar$Builder.class
 com\dreamfirestudios\dreamcore\DreamRecipe\RecipeType.class
