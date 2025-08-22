@@ -105,6 +105,7 @@ com\dreamfirestudios\dreamcore\DreamHologram\HologramEditLineEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandEqippedEvent.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookPagesUpdatedEvent.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarFrameAdvancedEvent.class
+com\dreamfirestudios\dreamcore\DreamRaycast\DreamRaycast.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskType.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookOpenEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\DreamPersistentBlock.class
@@ -138,8 +139,10 @@ com\dreamfirestudios\dreamcore\DreamCam\DreamCamSet.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBar$Builder.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarPlayerRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamLoop\OneTickLoop.class
+com\dreamfirestudios\dreamcore\DreamRaycast\DreamRaycast$PathRenderer.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskCreatedEvent.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\DreamFakeBlock.class
+com\dreamfirestudios\dreamcore\DreamRaycast\DreamRaycast$RaycastHit.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStandAnimator.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPlayerRemoved.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookCloseEvent.class
