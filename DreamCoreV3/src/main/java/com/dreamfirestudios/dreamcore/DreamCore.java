@@ -14,6 +14,7 @@ import com.dreamfirestudios.dreamcore.DreamLoop.IDreamLoop;
 import com.dreamfirestudios.dreamcore.DreamPlaceholder.DreamPlaceholderManager;
 import com.dreamfirestudios.dreamcore.DreamScoreboard.DreamScoreboard;
 import com.dreamfirestudios.dreamcore.DreamStopwatch.DreamStopwatch;
+import com.dreamfirestudios.dreamcore.DreamTeleport.DreamTeleport;
 import com.dreamfirestudios.dreamcore.DreamVariable.DreamVariableTest;
 import com.dreamfirestudios.dreamcore.DreamSmartInvs.SmartInvsPlugin;
 import net.luckperms.api.LuckPerms;
@@ -50,6 +51,7 @@ public class DreamCore extends JavaPlugin {
     public static final LinkedHashMap<UUID, Conversation> Conversations = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, DreamScoreboard> DreamScoreboards = new LinkedHashMap<>();
     public static final ArrayList<DreamStopwatch> DreamStopWatchs = new ArrayList<>();
+    public static final ArrayList<DreamTeleport> DreamTeleports = new ArrayList<>();
 
     public static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager GetDreamfireStorageManager(){return DreamfireStorageManager;}
 

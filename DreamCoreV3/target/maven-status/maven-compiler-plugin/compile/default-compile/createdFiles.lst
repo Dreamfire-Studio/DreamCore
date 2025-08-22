@@ -4,6 +4,7 @@ com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskPausedEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\DreamPersistentEntity.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\BlockDisplayAnimator.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookViewerAddedEvent.class
+com\dreamfirestudios\dreamcore\DreamTeleport\DreamTeleport.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamChat.class
 com\dreamfirestudios\dreamcore\DreamChat\FormatTags.class
 com\dreamfirestudios\dreamcore\DreamJava\DreamfireJavaAPI.class
@@ -22,6 +23,7 @@ com\dreamfirestudios\dreamcore\DreamPlaceholder\IDreamPlaceholder.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookViewerRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\InventoryListener.class
 com\dreamfirestudios\dreamcore\DreamLocation\DreamLocation.class
+com\dreamfirestudios\dreamcore\DreamTeleport\DreamTeleportAPI.class
 com\dreamfirestudios\dreamcore\DreamStopwatch\StopwatchStartedEvent.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\DreamLocationLimiter$LocationLimiterBuilder.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaUtil\UUIDTest.class
