@@ -11,6 +11,7 @@ com\dreamfirestudios\dreamcore\DreamBook\DreamBookViewerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamHologram\DreamHologram$HologramBuilder.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandSpawnEvent.class
+com\dreamfirestudios\dreamcore\DreamLoop\TwentyTickLoop.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPlayerLeaveEvent.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamChat.class
 com\dreamfirestudios\dreamcore\DreamChat\FormatTags.class
@@ -122,16 +123,19 @@ com\dreamfirestudios\dreamcore\DreamVanish\VanishShowTargetEvent.class
 com\dreamfirestudios\dreamcore\DreamCam\DreamCamSet.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBar$Builder.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarPlayerRemovedEvent.class
+com\dreamfirestudios\dreamcore\DreamLoop\OneTickLoop.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskCreatedEvent.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\DreamFakeBlock.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStandAnimator.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPlayerRemoved.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookCloseEvent.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskPausedEvent.class
+com\dreamfirestudios\dreamcore\DreamLoop\IDreamLoop.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\DreamBlockMask$Builder.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\DreamBlockDisplay.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStartedEvent.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\DreamfireStorageManager.class
+com\dreamfirestudios\dreamcore\DreamLoop\DreamAbstractLoop.class
 com\dreamfirestudios\dreamcore\DreamJava\PulseAutoRegister.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\BlockDisplayPool.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStand$1.class
