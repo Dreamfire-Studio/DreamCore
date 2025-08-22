@@ -62,6 +62,12 @@ E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\j
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantmentRegistry.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantWrapper.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamEnchantment\IDreamEnchantment.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamEntityMask\DreamEntityMask.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskCreateEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskPausedEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStartedEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStoppedEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskType.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamfireStorage\DreamfireStorageManager.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamfireStorage\DreamfireStorageObject.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamfireStorage\StorageObjectAddedEvent.java
@@ -81,6 +87,9 @@ E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\j
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentEntityRemovedEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackAddedEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackRemovedEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVanish\DreamVanish.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVanish\VanishHideTargetEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVanish\VanishShowTargetEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVariable\DreamAbstractVariableTest.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVariable\DreamVariableTest.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVariable\DreamVariableTestAPI.java
