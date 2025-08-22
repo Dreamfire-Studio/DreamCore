@@ -1,3 +1,4 @@
+com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockCreatedEvent.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskCreateEvent.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskPausedEvent.class
@@ -16,6 +17,7 @@ com\dreamfirestudios\dreamcore\DreamBook\DreamBook$BookBuilder.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPointReachedEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentBlockRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamVanish\DreamVanish.class
+com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockObserverAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\StorageObjectAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamJava\DreamfireClassAPI.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackRemovedEvent.class
@@ -26,6 +28,7 @@ com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskFrameComputedEvent.class
 com\dreamfirestudios\dreamcore\DreamVanish\VanishHideTargetEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookViewerRemovedEvent.class
+com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockUpdatedEvent.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaUtil\UUIDTest.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskFrameAppliedEvent.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarPausedEvent.class
@@ -49,11 +52,13 @@ com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskStoppedEvent.class
 com\dreamfirestudios\dreamcore\DreamJava\DreamClassID.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\BlockDisplayCreatedEvent.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\FloatTest.class
+com\dreamfirestudios\dreamcore\DreamFakeBlock\DreamFakeBlockAPI.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStandAnimator$Builder.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\DreamEntityMask$Builder.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarStoppedEvent.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarStartedEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandGlowEvent.class
+com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockObserverRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentBlockAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBook.class
 com\dreamfirestudios\dreamcore\DreamLuckPerms\DreamLuckPerms$GroupResult.class
@@ -62,6 +67,7 @@ com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPlayed.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentEntityRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBar.class
 com\dreamfirestudios\dreamcore\DreamVariable\DreamAbstractVariableTest.class
+com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockClearedEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandEqippedEvent.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookPagesUpdatedEvent.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarFrameAdvancedEvent.class
@@ -91,6 +97,7 @@ com\dreamfirestudios\dreamcore\DreamCam\DreamCamSet.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBar$Builder.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarPlayerRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskCreatedEvent.class
+com\dreamfirestudios\dreamcore\DreamFakeBlock\DreamFakeBlock.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStandAnimator.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPlayerRemoved.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookCloseEvent.class
