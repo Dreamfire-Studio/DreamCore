@@ -1,5 +1,0 @@
-name: DreamCore
-version: 1.0.0-SNAPSHOT
-main: com.dreamfirestudios.dreamCore.DreamCore
-api-version: 1.21
-depend: [ProtocolLib, LuckPerms, PlaceholderAPI]
