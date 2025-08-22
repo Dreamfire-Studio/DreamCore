@@ -10,6 +10,7 @@ com\dreamfirestudios\dreamcore\DreamCam\CamPathPlayerLeaveEvent.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamChat.class
 com\dreamfirestudios\dreamcore\DreamChat\FormatTags.class
 com\dreamfirestudios\dreamcore\DreamJava\DreamfireJavaAPI.class
+com\dreamfirestudios\dreamcore\DreamEnchantment\IDreamEnchantment.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBook$BookBuilder.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPointReachedEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentBlockRemovedEvent.class
@@ -32,6 +33,7 @@ com\dreamfirestudios\dreamcore\DreamBlock\RegionShape.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPaused.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandPosedEvent.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamMessageFormatter.class
+com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantWrapper.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandPose.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamMessageSettings.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBarData.class
@@ -73,6 +75,7 @@ com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarStopped.class
 com\dreamfirestudios\dreamcore\DreamCam\LookAtType.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarData.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBar$Builder.class
+com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantmentRegistry.class
 com\dreamfirestudios\dreamcore\DreamLuckPerms\DreamLuckPerms.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathStartEvent.class
 com\dreamfirestudios\dreamcore\DreamCore.class
