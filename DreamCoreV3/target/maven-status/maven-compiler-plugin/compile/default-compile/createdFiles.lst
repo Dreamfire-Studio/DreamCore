@@ -29,12 +29,15 @@ com\dreamfirestudios\dreamcore\DreamJava\DreamfireClassAPI.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamHologram\HologramRemoveLineEvent.class
 com\dreamfirestudios\dreamcore\DreamCam\DreamCamPathRunnable.class
+com\dreamfirestudios\dreamcore\DreamPlaceholder\DreamPlaceholderManager.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\DreamEntityMask.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarAPI.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskFrameComputedEvent.class
 com\dreamfirestudios\dreamcore\DreamVanish\VanishHideTargetEvent.class
 com\dreamfirestudios\dreamcore\DreamHologram\HologramSpawnEvent.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackAddedEvent.class
+com\dreamfirestudios\dreamcore\DreamPlaceholder\IDreamPlaceholder.class
+com\dreamfirestudios\dreamcore\DreamParticles\DreamParticles.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookViewerRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockUpdatedEvent.class
 com\dreamfirestudios\dreamcore\DreamLocation\DreamLocation.class
@@ -58,6 +61,7 @@ com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantWrapper.class
 com\dreamfirestudios\dreamcore\DreamItems\IDreamItemStack.class
 com\dreamfirestudios\dreamcore\DreamHologram\HologramAddLineEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandPose.class
+com\dreamfirestudios\dreamcore\DreamParticles\DreamParticles$ParticleShape.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamMessageSettings.class
 com\dreamfirestudios\dreamcore\DreamInventory\DreamInventory.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBarData.class

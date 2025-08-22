@@ -11,6 +11,7 @@ import com.dreamfirestudios.dreamcore.DreamFakeBlock.DreamFakeBlock;
 import com.dreamfirestudios.dreamcore.DreamHologram.DreamHologram;
 import com.dreamfirestudios.dreamcore.DreamLocationLimiter.DreamLocationLimiter;
 import com.dreamfirestudios.dreamcore.DreamLoop.IDreamLoop;
+import com.dreamfirestudios.dreamcore.DreamPlaceholder.DreamPlaceholderManager;
 import com.dreamfirestudios.dreamcore.DreamVariable.DreamVariableTest;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -25,6 +26,7 @@ public class DreamCore extends JavaPlugin {
 
     public static DreamCore DreamCore;
     public static LuckPerms LuckPerms;
+    public static DreamPlaceholderManager dreamPlaceholderManager;
     private static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager DreamfireStorageManager;
 
     public static final LinkedHashMap<UUID, DreamActionBar> DreamActionBars = new LinkedHashMap<>();
@@ -47,6 +49,7 @@ public class DreamCore extends JavaPlugin {
     public void onEnable() {
         DreamCore = this;
         LuckPerms = LuckPermsProvider.get();
+        dreamPlaceholderManager = new DreamPlaceholderManager("dreamcore", "Dreamfire Studios", "1.0.0");
     }
 
     public void OneTickClasses(){
