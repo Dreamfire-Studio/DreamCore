@@ -1,7 +1,5 @@
 package com.dreamfirestudios.dreamcore.DreamBlockMask;
 
-
-import com.dreamfirestudios.dreamCore.DreamfireBlockMask.DreamfireBlockMask;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
@@ -20,12 +18,12 @@ public class BlockMaskFrameComputedEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Player player;
-    private final DreamfireBlockMask mask;
+    private final DreamBlockMask mask;
     private final Map<org.bukkit.util.Vector, BlockState> newFrameStates;
     private final Map<org.bukkit.util.Vector, BlockState> previousFrameStates;
 
     public BlockMaskFrameComputedEvent(Player player,
-                                       DreamfireBlockMask mask,
+                                       DreamBlockMask mask,
                                        Map<org.bukkit.util.Vector, BlockState> newFrameStates,
                                        Map<org.bukkit.util.Vector, BlockState> previousFrameStates) {
         this.player = player;

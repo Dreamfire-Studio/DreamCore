@@ -1,5 +1,6 @@
 package com.dreamfirestudios.dreamcore.DreamBlockMask;
 
+import com.dreamfirestudios.dreamcore.DreamCore;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -165,7 +166,7 @@ public class DreamBlockMask {
         player.sendBlockChanges(lastFrameBlockStates.values());
         player.sendBlockChanges(visitedTrailLocations.values());
         new BlockMaskStoppedEvent(player, this);
-        return DreamCore.GetDreamfireCore().DeleteBlockMask(player.getUniqueId());
+        return DreamCore.DreamBlockMasks.remove(player.getUniqueId());
     }
 
     // ----------------------------- Utilities -----------------------------
@@ -288,7 +289,7 @@ public class DreamBlockMask {
          */
         public DreamBlockMask CreateMask(Player player){
             if (player == null) throw new IllegalArgumentException("Player cannot be null.");
-            var stored = DreamCore.GetDreamfireCore().GetBlockMask(player.getUniqueId());
+            var stored = DreamCore.DreamBlockMasks.getOrDefault(player.getUniqueId(), null);
             if (stored != null){
                 stored.addToExceptions(this.blockExceptions);
                 return stored;
@@ -307,7 +308,7 @@ public class DreamBlockMask {
             mask.blockExceptions = Collections.unmodifiableMap(new HashMap<>(this.blockExceptions));
 
             new BlockMaskCreatedEvent(mask, player);
-            return DreamCore.GetDreamfireCore().AddBlockMask(player.getUniqueId(), mask);
+            return DreamCore.DreamBlockMasks.put(player.getUniqueId(), mask);
         }
     }
 }
