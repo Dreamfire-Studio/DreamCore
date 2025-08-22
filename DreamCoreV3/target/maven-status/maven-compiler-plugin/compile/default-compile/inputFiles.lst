@@ -45,6 +45,15 @@ E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\j
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamBossBar\BossBarStoppedEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBar.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBarData.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamCam\CamPathPlayerAddedEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamCam\CamPathPlayerLeaveEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamCam\CamPathPointReachedEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamCam\CamPathStartEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamCam\CamPathStopEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamCam\DreamCamPath.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamCam\DreamCamPathRunnable.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamCam\DreamCamSet.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamCam\LookAtType.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamChat\DreamChat.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamChat\DreamMessageFormatter.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamChat\DreamMessageSettings.java

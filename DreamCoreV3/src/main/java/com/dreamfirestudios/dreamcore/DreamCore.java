@@ -4,6 +4,7 @@ import com.dreamfirestudios.dreamcore.DreamActionBar.DreamActionBar;
 import com.dreamfirestudios.dreamcore.DreamBlockMask.DreamBlockMask;
 import com.dreamfirestudios.dreamcore.DreamBook.DreamBook;
 import com.dreamfirestudios.dreamcore.DreamBossBar.DreamBossBar;
+import com.dreamfirestudios.dreamcore.DreamCam.DreamCamPath;
 import com.dreamfirestudios.dreamcore.DreamVariable.DreamVariableTest;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -23,6 +24,7 @@ public class DreamCore extends JavaPlugin {
     public static final LinkedHashMap<UUID, DreamBook> DreamBooks = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, DreamBossBar> DreamBossBars = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, DreamBlockMask> DreamBlockMasks = new LinkedHashMap<>();
+    public static final LinkedHashMap<UUID, DreamCamPath> DreamCamPaths = new LinkedHashMap<>();
 
     public static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager GetDreamfireStorageManager(){return DreamfireStorageManager;}
 
