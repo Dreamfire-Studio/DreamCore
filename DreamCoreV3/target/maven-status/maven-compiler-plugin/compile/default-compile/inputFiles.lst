@@ -137,6 +137,12 @@ E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\j
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamRecipe\DreamRecipeRegistry.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamRecipe\IDreamRecipe.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamRecipe\RecipeType.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamScoreboard\DreamScoreboard.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamScoreboard\DreamScoreboardData.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamScoreboard\DreamScoreboardLines.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamScoreboard\ScoreboardCreatedEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamScoreboard\ScoreboardPlayerAddedEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamScoreboard\ScoreboardPlayerRemovedEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVanish\DreamVanish.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVanish\VanishHideTargetEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\DreamCoreV3\src\main\java\com\dreamfirestudios\dreamcore\DreamVanish\VanishShowTargetEvent.java

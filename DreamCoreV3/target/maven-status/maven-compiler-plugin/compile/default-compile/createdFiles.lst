@@ -15,9 +15,11 @@ com\dreamfirestudios\dreamcore\DreamLoop\TwentyTickLoop.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPlayerLeaveEvent.class
 com\dreamfirestudios\dreamcore\DreamChat\DreamChat.class
 com\dreamfirestudios\dreamcore\DreamChat\FormatTags.class
+com\dreamfirestudios\dreamcore\DreamScoreboard\DreamScoreboard$PulseScoreboardBuilder.class
 com\dreamfirestudios\dreamcore\DreamJava\DreamfireJavaAPI.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamPrompt\DreamPrompt.class
+com\dreamfirestudios\dreamcore\DreamScoreboard\ScoreboardCreatedEvent.class
 com\dreamfirestudios\dreamcore\DreamEnchantment\IDreamEnchantment.class
 com\dreamfirestudios\dreamcore\DreamRecipe\IDreamRecipe$1.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBook$BookBuilder.class
@@ -82,6 +84,7 @@ com\dreamfirestudios\dreamcore\DreamPrompt\PromptEndedEvent$EndReason.class
 com\dreamfirestudios\dreamcore\DreamHologram\DreamHologram.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\BlockDisplayCreatedEvent.class
 com\dreamfirestudios\dreamcore\DreamVariable\JavaLang\FloatTest.class
+com\dreamfirestudios\dreamcore\DreamScoreboard\DreamScoreboardLines.class
 com\dreamfirestudios\dreamcore\DreamFakeBlock\DreamFakeBlockAPI.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStandAnimator$Builder.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\DreamEntityMask$Builder.class
@@ -106,6 +109,7 @@ com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockClearedEvent.class
 com\dreamfirestudios\dreamcore\DreamHologram\HologramEditLineEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandEqippedEvent.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookPagesUpdatedEvent.class
+com\dreamfirestudios\dreamcore\DreamScoreboard\DreamScoreboard.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarFrameAdvancedEvent.class
 com\dreamfirestudios\dreamcore\DreamRaycast\DreamRaycast.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskType.class
@@ -120,6 +124,7 @@ com\dreamfirestudios\dreamcore\DreamArmorStand\DreamfireArmorStandBuilder.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandSlot.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\DreamBlockMask.class
 com\dreamfirestudios\dreamcore\DreamPrompt\PromptRestartEvent.class
+com\dreamfirestudios\dreamcore\DreamScoreboard\ScoreboardPlayerRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamBlock\DreamBlock.class
 com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentEntityAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandAnimationFrameDataBuilder.class
@@ -128,6 +133,8 @@ com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarStopped.class
 com\dreamfirestudios\dreamcore\DreamCam\LookAtType.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\DreamLocationLimiter.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarData.class
+com\dreamfirestudios\dreamcore\DreamScoreboard\DreamScoreboardLines$PulseScoreboardLinesBuilder.class
+com\dreamfirestudios\dreamcore\DreamScoreboard\ScoreboardPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBar$Builder.class
 com\dreamfirestudios\dreamcore\DreamRecipe\RecipeType.class
 com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantmentRegistry.class
@@ -138,6 +145,7 @@ com\dreamfirestudios\dreamcore\DreamMessagingChannel\DreamPluginMessage.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStoppedEvent.class
 com\dreamfirestudios\dreamcore\DreamCore.class
 com\dreamfirestudios\dreamcore\DreamVanish\VanishShowTargetEvent.class
+com\dreamfirestudios\dreamcore\DreamScoreboard\DreamScoreboardData.class
 com\dreamfirestudios\dreamcore\DreamCam\DreamCamSet.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBar$Builder.class
 com\dreamfirestudios\dreamcore\DreamBossBar\BossBarPlayerRemovedEvent.class

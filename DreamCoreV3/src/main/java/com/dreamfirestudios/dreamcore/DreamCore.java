@@ -12,6 +12,7 @@ import com.dreamfirestudios.dreamcore.DreamHologram.DreamHologram;
 import com.dreamfirestudios.dreamcore.DreamLocationLimiter.DreamLocationLimiter;
 import com.dreamfirestudios.dreamcore.DreamLoop.IDreamLoop;
 import com.dreamfirestudios.dreamcore.DreamPlaceholder.DreamPlaceholderManager;
+import com.dreamfirestudios.dreamcore.DreamScoreboard.DreamScoreboard;
 import com.dreamfirestudios.dreamcore.DreamVariable.DreamVariableTest;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -42,8 +43,9 @@ public class DreamCore extends JavaPlugin {
     public static final LinkedHashMap<String, DreamFakeBlock> DreamFakeBlocks = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, DreamHologram> DreamHolograms = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, DreamLocationLimiter> DreamLocationLimiters = new LinkedHashMap<>();
-    public static final LinkedHashMap<String, IDreamLoop> IDreamLoops = new LinkedHashMap<>();
+    public static final LinkedHashMap<UUID, IDreamLoop> IDreamLoops = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, Conversation> Conversations = new LinkedHashMap<>();
+    public static final LinkedHashMap<UUID, DreamScoreboard> DreamScoreboards = new LinkedHashMap<>();
 
     public static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager GetDreamfireStorageManager(){return DreamfireStorageManager;}
 
