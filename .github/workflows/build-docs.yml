@@ -109,28 +109,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          BASE="${REMOTE_BASE}/${REPO_SLUG}"
-          # Export values into the remote shell and send a small script
-          ssh -p "${SSH_PORT}" -i ~/.ssh/id_ed25519 "${SSH_USER}@${SSH_HOST}" \
-            "BASE='${REMOTE_BASE}/${REPO_SLUG}' REPO_SLUG='${REPO_SLUG}' BRANCH='${BRANCH_NAME}' DEFAULT='${DEFAULT_BRANCH}' bash -s" <<'REMOTE'
-          set -euo pipefail
-          mkdir -p "$BASE"
-          TMP="$(mktemp)"
-          {
-            echo '<!doctype html><meta charset="utf-8"><title>'"$REPO_SLUG"' branches</title>'
-            echo '<h1>'"$REPO_SLUG"' — Branches</h1><ul>'
-            for d in "$BASE"/*/; do
-              b=$(basename "$d")
-              [ "$b" = "latest" ] && continue
-              echo "<li><a href=\"$b/\">$b</a></li>"
-            done
-            echo '</ul>'
-          } > "$TMP"
-          mv "$TMP" "$BASE/index.html"
-          if [ "$BRANCH" = "$DEFAULT" ]; then
-            ln -sfn "$BRANCH" "$BASE/latest"
-          fi
-REMOTE
+          ssh -p "${SSH_PORT}" -i ~/.ssh/id_ed25519 "${SSH_USER}@${SSH_HOST}" bash -lc "
+            BASE='${REMOTE_BASE}/${REPO_SLUG}'; REPO_SLUG='${REPO_SLUG}'; BRANCH='${BRANCH_NAME}'; DEFAULT='${DEFAULT_BRANCH}';
+            mkdir -p \"\$BASE\";
+            TMP=\$(mktemp);
+            {
+              echo '<!doctype html><meta charset=\"utf-8\"><title>'\"\$REPO_SLUG\"' branches</title>';
+              echo '<h1>'\"\$REPO_SLUG\"' — Branches</h1><ul>';
+              for d in \"\$BASE\"/*/; do
+                b=\$(basename \"\$d\");
+                [ \"\$b\" = \"latest\" ] && continue;
+                echo \"<li><a href=\\\"\$b/\\\">\$b</a></li>\";
+              done
+              echo '</ul>';
+            } > \"\$TMP\";
+            mv \"\$TMP\" \"\$BASE/index.html\";
+            if [ \"\$BRANCH\" = \"\$DEFAULT\" ]; then ln -sfn \"\$BRANCH\" \"\$BASE/latest\"; fi
+          "
 
       - name: Emit public URL
         shell: bash
