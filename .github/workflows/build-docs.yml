@@ -1,4 +1,5 @@
 name: Build & Publish Docs
+
 on:
   push:
     branches: ["**"]
@@ -27,8 +28,11 @@ jobs:
       DOCS_BASE_URL: ${{ secrets.DOCS_BASE_URL || 'http://89.117.36.132/docs' }}
 
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0, submodules: recursive }
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
 
       - name: Install Doxygen + Graphviz
         run: |
@@ -37,57 +41,66 @@ jobs:
 
       - name: Build docs (Doxygen)
         run: |
-          test -f Doxyfile || (echo "Missing Doxyfile" && exit 1)
+          test -f Doxyfile || { echo "::error::Missing Doxyfile at repo root"; exit 1; }
           doxygen Doxyfile
 
       - name: Prepare SSH
+        env:
+          KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
-          printf "%s" "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          printf "%s" "$KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          echo "PORT=${SSH_PORT:-22}" >> $GITHUB_ENV
+          echo "PORT=${SSH_PORT:-22}" >> "$GITHUB_ENV"
           ssh-keyscan -p "${SSH_PORT:-22}" "$SSH_HOST" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
       - name: Deploy HTML to VPS (branch-scoped)
         run: |
+          SRC="docs/_doxygen/html/"
+          [ -d "$SRC" ] || { echo "::error::Docs folder '$SRC' not found"; ls -la docs || true; exit 1; }
           TARGET="${REMOTE_BASE}/${REPO_SLUG}/${BRANCH_NAME}"
-          echo "Deploying to: ${SSH_HOST}:${TARGET}"
-          ssh -i ~/.ssh/id_ed25519 -p "${PORT}" "${SSH_USER}@${SSH_HOST}" "mkdir -p '${TARGET}.tmp' && chmod -R 755 '${REMOTE_BASE}'"
-          rsync -avz --delete -e "ssh -i ~/.ssh/id_ed25519 -p ${PORT}" docs/_doxygen/html/ "${SSH_USER}@${SSH_HOST}":"${TARGET}.tmp/"
+          echo "Deploying to ${SSH_HOST}:${TARGET}"
+          ssh -i ~/.ssh/id_ed25519 -p "${PORT}" "${SSH_USER}@${SSH_HOST}" "mkdir -p '${TARGET}.tmp'"
+          rsync -az --delete -e "ssh -i ~/.ssh/id_ed25519 -p ${PORT}" "$SRC" "${SSH_USER}@${SSH_HOST}":"${TARGET}.tmp/"
           ssh -i ~/.ssh/id_ed25519 -p "${PORT}" "${SSH_USER}@${SSH_HOST}" "rm -rf '${TARGET}.bak' && mv '${TARGET}' '${TARGET}.bak' 2>/dev/null || true && mv '${TARGET}.tmp' '${TARGET}' && rm -rf '${TARGET}.bak'"
 
       - name: Compute public docs URL
         id: puburl
         run: |
-          echo "url=${DOCS_BASE_URL}/${REPO_SLUG}/${BRANCH_NAME}/index.html" >> $GITHUB_OUTPUT
+          echo "url=${DOCS_BASE_URL}/${REPO_SLUG}/${BRANCH_NAME}/index.html" >> "$GITHUB_OUTPUT"
 
       - name: Update GitHub Wiki
+        shell: bash
         run: |
-          set -euo pipefail
+          set -euxo pipefail
           WIKI_URL="https://x-access-token:${WIKI_TOKEN}@github.com/${REPO_SLUG}.wiki.git"
           git config --global user.email "${WIKI_EMAIL}"
           git config --global user.name  "${WIKI_NAME}"
           rm -rf wiki && git clone "${WIKI_URL}" wiki
           cd wiki
-          REPO_NAME="$(echo "${REPO_SLUG}" | cut -d'/' -f2)"
-          cat > Home.md << 'EOF'
-# Project Documentation
-This wiki updates automatically on each push. Full API docs are deployed per branch to our website.
-- Use the Sidebar to jump to branches.
-EOF
-          cat > _Sidebar.md << EOF
-# ${REPO_NAME} Wiki
-- [[Home|Home]]
-- Branch Docs
-  - [[${BRANCH_NAME}|${BRANCH_NAME}]]
-EOF
-          cat > "${BRANCH_NAME}.md" << EOF
-# ${REPO_NAME} — ${BRANCH_NAME}
-Latest generated API docs for \`${BRANCH_NAME}\`:
-- **HTML site:** [Open docs](${{ steps.puburl.outputs.url }})
-_Updated by CI on $(date -u +"%Y-%m-%d %H:%M:%S UTC")._
-EOF
+          REPO_NAME="${REPO_SLUG#*/}"
+
+          cat > Home.md <<'MD'
+          # Project Documentation
+          This wiki updates automatically on each push. Full API docs are deployed per branch to our website.
+          - Use the Sidebar to jump to branches.
+          MD
+
+          cat > _Sidebar.md <<MD
+          # ${REPO_NAME} Wiki
+          - [[Home|Home]]
+          - Branch Docs
+            - [[${BRANCH_NAME}|${BRANCH_NAME}]]
+          MD
+
+          cat > "${BRANCH_NAME}.md" <<MD
+          # ${REPO_NAME} — ${BRANCH_NAME}
+          Latest generated API docs for \`${BRANCH_NAME}\`:
+          - **HTML site:** [Open docs](${{ steps.puburl.outputs.url }})
+          _Updated by CI on $(date -u +"%Y-%m-%d %H:%M:%S UTC")._
+          MD
+
           git add -A
           git commit -m "docs(wiki): update for ${BRANCH_NAME}" || true
           git push
