@@ -6,9 +6,12 @@
 
 # Project
 PROJECT_NAME           = Dreamfire Docs
-OUTPUT_DIRECTORY       = docs/_doxygen
+OUTPUT_DIRECTORY       = ./docs/_doxygen
 GENERATE_HTML          = YES
 HTML_OUTPUT            = html
+HTML_EXTRA_STYLESHEET  = docs/theme/dreamfire-doxygen.css
+HTML_HEADER            = docs/theme/header.html
+HTML_FOOTER            = docs/theme/footer.html
 GENERATE_LATEX         = NO
 GENERATE_XML           = NO
 QUIET                  = YES
@@ -49,7 +52,6 @@ VERBATIM_HEADERS       = YES
 # Diagrams (keep modest to avoid heavy CI time)
 HAVE_DOT               = YES
 DOT_IMAGE_FORMAT       = svg
-CLASS_DIAGRAMS         = YES
 CALL_GRAPH             = NO
 CALLER_GRAPH           = NO
 DOT_GRAPH_MAX_NODES    = 50

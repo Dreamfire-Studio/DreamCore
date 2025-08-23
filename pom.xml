@@ -60,10 +60,6 @@
 
     <repositories>
         <repository>
-            <id>${github.server.id}</id>
-            <url>https://maven.pkg.github.com/${github.owner}/${github.repo}</url>
-        </repository>
-        <repository>
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
