@@ -92,7 +92,7 @@ jobs:
           ssh-keygen -y -f ~/.ssh/id_ed25519 >/dev/null 2>&1 || { echo "::error::decoded key invalid"; exit 1; }
           ssh-keyscan -p "${SSH_PORT}" "${SSH_HOST}" >> ~/.ssh/known_hosts 2>/dev/null || true
           chmod 644 ~/.ssh/known_hosts
-          ssh -o BatchMode=yes -p "${SSH_PORT}" -i ~/.ssh/id_ed25519 "${SSH_USER}@${SSH_HOST}" echo ok
+          ssh -o BatchMode=yes -o IdentitiesOnly=yes -p "${SSH_PORT}" -i ~/.ssh/id_ed25519 "${SSH_USER}@${SSH_HOST}" echo ok
 
       - name: Deploy docs to VPS (atomic)
         shell: bash
@@ -110,31 +110,27 @@ jobs:
         run: |
           set -euo pipefail
           BASE="${REMOTE_BASE}/${REPO_SLUG}"
-          ssh -p "${SSH_PORT}" -i ~/.ssh/id_ed25519 "${SSH_USER}@${SSH_HOST}" bash -s <<'REMOTE'
-            set -euo pipefail
-            BASE="$0"; REPO_SLUG="$1"; BRANCH="$2"; DEFAULT="$3"
-            mkdir -p "$BASE"
-            # simple index listing available branches (relative links)
-            TMP="$(mktemp)"
-            {
-              echo '<!doctype html><meta charset="utf-8"><title>'"$REPO_SLUG"' branches</title>'
-              echo '<h1>'"$REPO_SLUG"' — Branches</h1><ul>'
-              for d in "$BASE"/*/; do
-                b=\$(basename "\$d")
-                [ "\$b" = "latest" ] && continue
-                echo "<li><a href=\"\$b/\">\$b</a></li>"
-              done
-              echo '</ul>'
-            } > "\$TMP"
-            mv "\$TMP" "$BASE/index.html"
-            # update 'latest' symlink when default branch builds
-            if [ "$BRANCH" = "$DEFAULT" ]; then
-              ln -sfn "$BRANCH" "$BASE/latest"
-            fi
+          # Export values into the remote shell and send a small script
+          ssh -p "${SSH_PORT}" -i ~/.ssh/id_ed25519 "${SSH_USER}@${SSH_HOST}" \
+            "BASE='${REMOTE_BASE}/${REPO_SLUG}' REPO_SLUG='${REPO_SLUG}' BRANCH='${BRANCH_NAME}' DEFAULT='${DEFAULT_BRANCH}' bash -s" <<'REMOTE'
+          set -euo pipefail
+          mkdir -p "$BASE"
+          TMP="$(mktemp)"
+          {
+            echo '<!doctype html><meta charset="utf-8"><title>'"$REPO_SLUG"' branches</title>'
+            echo '<h1>'"$REPO_SLUG"' — Branches</h1><ul>'
+            for d in "$BASE"/*/; do
+              b=$(basename "$d")
+              [ "$b" = "latest" ] && continue
+              echo "<li><a href=\"$b/\">$b</a></li>"
+            done
+            echo '</ul>'
+          } > "$TMP"
+          mv "$TMP" "$BASE/index.html"
+          if [ "$BRANCH" = "$DEFAULT" ]; then
+            ln -sfn "$BRANCH" "$BASE/latest"
+          fi
 REMOTE
-          # pass args to remote heredoc
-        args: |
-          ${REMOTE_BASE}/${REPO_SLUG} ${REPO_SLUG} ${BRANCH_NAME} ${DEFAULT_BRANCH}
 
       - name: Emit public URL
         shell: bash
