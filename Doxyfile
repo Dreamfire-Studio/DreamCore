@@ -49,7 +49,6 @@ VERBATIM_HEADERS       = YES
 # Diagrams (keep modest to avoid heavy CI time)
 HAVE_DOT               = YES
 DOT_IMAGE_FORMAT       = svg
-CLASS_DIAGRAMS         = YES
 CALL_GRAPH             = NO
 CALLER_GRAPH           = NO
 DOT_GRAPH_MAX_NODES    = 50
