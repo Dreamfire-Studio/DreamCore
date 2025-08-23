@@ -16,20 +16,20 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     env:
-      REPO_SLUG:   ${{ github.repository }}
-      BRANCH_NAME: ${{ github.ref_name }}
+      REPO_SLUG:     ${{ github.repository }}
+      BRANCH_NAME:   ${{ github.ref_name }}
+      REMOTE_BASE:   /srv/app/wiki
 
-      # map repo secrets -> env
-      SSH_HOST:    ${{ secrets.VPS_HOST }}
-      SSH_USER:    ${{ secrets.VPS_USER }}
-      SSH_PORT:    ${{ secrets.VPS_PORT || '22' }}
-      WIKI_TOKEN:  ${{ secrets.WIKI_TOKEN }}
+      # Secrets → env
+      SSH_HOST:      ${{ secrets.VPS_HOST }}
+      SSH_USER:      ${{ secrets.VPS_USER }}
+      SSH_PORT:      ${{ secrets.VPS_PORT || '22' }}
+      WIKI_TOKEN:    ${{ secrets.WIKI_TOKEN }}
 
-      # defaults
-      WIKI_EMAIL:  ${{ secrets.WIKI_GIT_EMAIL || 'ci-bot@users.noreply.github.com' }}
-      WIKI_NAME:   ${{ secrets.WIKI_GIT_NAME  || 'Docs CI Bot' }}
+      # Optional niceties
+      WIKI_EMAIL:    ${{ secrets.WIKI_GIT_EMAIL || 'ci-bot@users.noreply.github.com' }}
+      WIKI_NAME:     ${{ secrets.WIKI_GIT_NAME  || 'Docs CI Bot' }}
       DOCS_BASE_URL: ${{ secrets.DOCS_BASE_URL || 'http://89.117.36.132/docs' }}
-      REMOTE_BASE: /srv/app/wiki
 
     steps:
       - name: Checkout
@@ -43,11 +43,10 @@ jobs:
           set -e
           for v in SSH_HOST SSH_USER WIKI_TOKEN; do
             if [ -z "${!v}" ]; then
-              echo "::error title=Missing $v::$v is empty. Add the corresponding repository secret."
+              echo "::error title=Missing $v::$v is empty. Set the repository secret."
               exit 1
             fi
           done
-          echo "✓ required secrets present"
 
       - name: Install toolchain
         shell: bash
@@ -72,18 +71,18 @@ jobs:
             exit 1
           fi
 
-          # Make config compatible with runner doxygen and remove obsolete option
+          # Make config compatible and remove obsolete option
           doxygen -u Doxyfile || true
           sed -i '/^CLASS_DIAGRAMS[[:space:]]*=/d' Doxyfile || true
 
-          # Ensure OUTPUT_DIRECTORY is set to our path (with safe leading ./)
+          # Ensure OUTPUT_DIRECTORY points to ./docs/_doxygen
           if grep -q '^OUTPUT_DIRECTORY' Doxyfile; then
             sed -i 's|^OUTPUT_DIRECTORY[[:space:]]*=.*|OUTPUT_DIRECTORY = ./docs/_doxygen|' Doxyfile
           else
             printf '\nOUTPUT_DIRECTORY = ./docs/_doxygen\n' >> Doxyfile
           fi
 
-          # Try to create again; if still blocked, build in temp and copy back
+          # Recheck/create; if blocked, build in temp then copy back
           OUT="./docs/_doxygen"
           if ! install -d "$OUT/html"; then
             echo "::warning::Could not create $OUT; falling back to runner temp"
@@ -99,17 +98,16 @@ jobs:
           echo ">>> running doxygen to OUT=$OUT"
           doxygen "$CFG" 2>&1 | tee doxygen.log
 
-          # If we used temp output, copy into repo path for later deploy
           if [ "$OUT" != "./docs/_doxygen" ]; then
             mkdir -p ./docs/_doxygen
             rsync -a "$OUT/" ./docs/_doxygen/
           fi
 
-          if [ ! -f ./docs/_doxygen/html/index.html ]; then
+          test -f ./docs/_doxygen/html/index.html || {
             echo "::error title=Docs not generated::Expected ./docs/_doxygen/html/index.html but it wasn't created."
             tail -n 200 doxygen.log || true
             exit 1
-          fi
+          }
 
           find ./docs/_doxygen/html -maxdepth 2 -type f | head -n 50 || true
 
@@ -119,21 +117,19 @@ jobs:
           KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
           set -euo pipefail
-          if [ -z "$KEY" ]; then
-            echo "::error title=Missing key::VPS_SSH_KEY is not set."
+          if [ -z "${KEY:-}" ]; then
+            echo "::error title=Missing key::VPS_SSH_KEY is not set (must be the *private* OpenSSH key, no passphrase)."
             exit 1
           fi
           mkdir -p ~/.ssh
-          printf "%s" "$KEY" > ~/.ssh/id_ed25519
+          # normalize CRLF from Windows pastes
+          printf "%s" "$KEY" | tr -d '\r' > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -p "${SSH_PORT}" "${SSH_HOST}" >> ~/.ssh/known_hosts 2>/dev/null || true
           chmod 644 ~/.ssh/known_hosts
 
-          echo "Testing SSH connectivity to ${SSH_USER}@${SSH_HOST}:${SSH_PORT} ..."
-          if ! ssh -i ~/.ssh/id_ed25519 -p "${SSH_PORT}" -o BatchMode=yes -o ConnectTimeout=10 "${SSH_USER}@${SSH_HOST}" "echo ok"; then
-            echo "::error title=SSH failed::Check VPS_SSH_KEY, VPS_HOST, VPS_USER, firewall, and that /home/${SSH_USER}/.ssh/authorized_keys contains the matching public key."
-            exit 1
-          fi
+          echo ">>> Testing SSH connectivity (verbose)…"
+          ssh -vvv -i ~/.ssh/id_ed25519 -p "${SSH_PORT}" -o BatchMode=yes "${SSH_USER}@${SSH_HOST}" "echo ok"
 
       - name: Deploy HTML to VPS (branch-scoped, atomic)
         shell: bash
@@ -144,7 +140,8 @@ jobs:
           echo "Deploying ${SRC} -> ${SSH_HOST}:${TARGET}"
           ssh -i ~/.ssh/id_ed25519 -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "mkdir -p '${TARGET}.tmp'"
           rsync -az --delete -e "ssh -i ~/.ssh/id_ed25519 -p ${SSH_PORT}" "$SRC" "${SSH_USER}@${SSH_HOST}":"${TARGET}.tmp/"
-          ssh -i ~/.ssh/id_ed25519 -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "rm -rf '${TARGET}.bak' && mv '${TARGET}' '${TARGET}.bak' 2>/dev/null || true && mv '${TARGET}.tmp' '${TARGET}' && rm -rf '${TARGET}.bak'"
+          ssh -i ~/.ssh/id_ed25519 -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+            "rm -rf '${TARGET}.bak' && mv '${TARGET}' '${TARGET}.bak' 2>/dev/null || true && mv '${TARGET}.tmp' '${TARGET}' && rm -rf '${TARGET}.bak'"
 
       - name: Compute public docs URL
         id: puburl
@@ -165,19 +162,22 @@ jobs:
           cd wiki
           REPO_NAME="${REPO_SLUG#*/}"
 
+          # Home
           cat > Home.md <<'MD'
           # Project Documentation
           This wiki updates automatically on each push. Full API docs are deployed per branch to our website.
           - Use the Sidebar to jump to branches.
           MD
 
+          # Sidebar (link to safe filename, display real branch)
           cat > _Sidebar.md <<MD
           # ${REPO_NAME} Wiki
           - [[Home|Home]]
           - Branch Docs
-            - [[${BRANCH_NAME}|${BRANCH_NAME}]]
+            - [[${SAFE_BRANCH}|${BRANCH_NAME}]]
           MD
 
+          # Branch page
           cat > "${SAFE_BRANCH}.md" <<MD
           # ${REPO_NAME} — ${BRANCH_NAME}
           Latest generated API docs for \`${BRANCH_NAME}\`:
