@@ -1,4 +1,4 @@
-name: Build & Publish Docs
+name: Build & Publish Docs (site only)
 
 on:
   push:
@@ -16,37 +16,29 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     env:
-      REPO_SLUG:     ${{ github.repository }}
-      BRANCH_NAME:   ${{ github.ref_name }}
-      REMOTE_BASE:   /srv/app/wiki
-      SSH_HOST:      ${{ secrets.VPS_HOST }}
-      SSH_USER:      ${{ secrets.VPS_USER }}
-      SSH_PORT:      ${{ secrets.VPS_PORT || '22' }}
-      WIKI_TOKEN:    ${{ secrets.WIKI_TOKEN }}
-      WIKI_EMAIL:    ${{ secrets.WIKI_GIT_EMAIL || 'ci-bot@users.noreply.github.com' }}
-      WIKI_NAME:     ${{ secrets.WIKI_GIT_NAME  || 'Docs CI Bot' }}
-      DOCS_BASE_URL: ${{ secrets.DOCS_BASE_URL || 'http://89.117.36.132/docs' }}
+      REPO_SLUG:       ${{ github.repository }}                # owner/repo
+      BRANCH_NAME:     ${{ github.ref_name }}
+      DEFAULT_BRANCH:  ${{ github.event.repository.default_branch }}
+      REMOTE_BASE:     /srv/app/wiki                           # served by Nginx at /docs/
+      DOCS_BASE_URL:   ${{ secrets.DOCS_BASE_URL || 'http://89.117.36.132/docs' }}
+
+      SSH_HOST:        ${{ secrets.VPS_HOST }}
+      SSH_USER:        ${{ secrets.VPS_USER }}
+      SSH_PORT:        ${{ secrets.VPS_PORT || '22' }}
+      KEY_B64:         ${{ secrets.VPS_SSH_KEY_B64 }}          # base64 of *private* OpenSSH key (no passphrase)
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        with: { fetch-depth: 0 }
 
-      - name: Validate required env/secrets
+      - name: Validate secrets
         shell: bash
         run: |
           set -e
-          for v in SSH_HOST SSH_USER WIKI_TOKEN; do
-            if [ -z "${!v}" ]; then
-              echo "::error title=Missing $v::$v is empty. Add the repository secret."
-              exit 1
-            fi
+          for v in SSH_HOST SSH_USER KEY_B64; do
+            [ -n "${!v}" ] || { echo "::error::$v is missing"; exit 1; }
           done
-          if [ -z "${{ secrets.VPS_SSH_KEY_B64 }}" ]; then
-            echo "::error title=Missing VPS_SSH_KEY_B64::Add base64 of your *private* OpenSSH key (no passphrase)."
-            exit 1
-          fi
 
       - name: Install toolchain
         shell: bash
@@ -54,21 +46,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y doxygen graphviz rsync openssh-client
 
-      - name: Prepare docs output folder
+      - name: Prepare docs output
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p docs/_doxygen/html
-          ls -ld docs docs/_doxygen docs/_doxygen/html || true
 
       - name: Build docs (Doxygen)
         shell: bash
         run: |
           set -euo pipefail
-          if [ ! -f Doxyfile ]; then
-            echo "::error title=Doxyfile missing::Add a Doxyfile at the repo root."
-            exit 1
-          fi
+          [ -f Doxyfile ] || { echo "::error title=Doxyfile missing::Add a Doxyfile at repo root."; exit 1; }
           doxygen -u Doxyfile || true
           sed -i '/^CLASS_DIAGRAMS[[:space:]]*=/d' Doxyfile || true
           if grep -q '^OUTPUT_DIRECTORY' Doxyfile; then
@@ -78,7 +66,6 @@ jobs:
           fi
           OUT="./docs/_doxygen"
           if ! install -d "$OUT/html"; then
-            echo "::warning::Could not create $OUT; falling back to runner temp"
             OUT="$RUNNER_TEMP/doxygen_out"
             install -d "$OUT/html"
             cp Doxyfile Doxyfile.effective
@@ -87,85 +74,73 @@ jobs:
           else
             CFG="Doxyfile"
           fi
-          echo ">>> running doxygen to OUT=$OUT"
-          doxygen "$CFG" 2>&1 | tee doxygen.log
+          echo ">>> running doxygen to $OUT"
+          doxygen "$CFG"
           if [ "$OUT" != "./docs/_doxygen" ]; then
             mkdir -p ./docs/_doxygen
             rsync -a "$OUT/" ./docs/_doxygen/
           fi
-          test -f ./docs/_doxygen/html/index.html || {
-            echo "::error title=Docs not generated::Expected ./docs/_doxygen/html/index.html but it wasn't created."
-            tail -n 200 doxygen.log || true
-            exit 1
-          }
-          find ./docs/_doxygen/html -maxdepth 2 -type f | head -n 50 || true
+          test -f ./docs/_doxygen/html/index.html || { echo "::error::docs/_doxygen/html/index.html not created"; exit 1; }
 
       - name: Prepare SSH (decode base64 key)
         shell: bash
-        env:
-          KEY_B64: ${{ secrets.VPS_SSH_KEY_B64 }}
         run: |
           set -euo pipefail
           mkdir -p ~/.ssh
           echo "$KEY_B64" | base64 -d > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          if ! ssh-keygen -y -f ~/.ssh/id_ed25519 >/dev/null 2>&1; then
-            echo "::error title=Unreadable key::Decoded private key invalid. Recreate base64 from your working key."
-            exit 1
-          fi
+          ssh-keygen -y -f ~/.ssh/id_ed25519 >/dev/null 2>&1 || { echo "::error::decoded key invalid"; exit 1; }
           ssh-keyscan -p "${SSH_PORT}" "${SSH_HOST}" >> ~/.ssh/known_hosts 2>/dev/null || true
           chmod 644 ~/.ssh/known_hosts
-          echo ">>> Testing SSH connectivity (verbose)…"
-          ssh -vvv -i ~/.ssh/id_ed25519 -p "${SSH_PORT}" -o BatchMode=yes -o IdentitiesOnly=yes \
-            "${SSH_USER}@${SSH_HOST}" "echo ok"
+          ssh -o BatchMode=yes -p "${SSH_PORT}" -i ~/.ssh/id_ed25519 "${SSH_USER}@${SSH_HOST}" echo ok
 
-      - name: Deploy HTML to VPS (branch-scoped, atomic)
+      - name: Deploy docs to VPS (atomic)
         shell: bash
         run: |
           set -euo pipefail
           SRC="docs/_doxygen/html/"
           TARGET="${REMOTE_BASE}/${REPO_SLUG}/${BRANCH_NAME}"
-          echo "Deploying ${SRC} -> ${SSH_HOST}:${TARGET}"
-          ssh -i ~/.ssh/id_ed25519 -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "mkdir -p '${TARGET}.tmp'"
-          rsync -az --delete -e "ssh -i ~/.ssh/id_ed25519 -p ${SSH_PORT}" "$SRC" "${SSH_USER}@${SSH_HOST}":"${TARGET}.tmp/"
-          ssh -i ~/.ssh/id_ed25519 -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+          ssh -p "${SSH_PORT}" -i ~/.ssh/id_ed25519 "${SSH_USER}@${SSH_HOST}" "mkdir -p '${TARGET}.tmp'"
+          rsync -az --delete -e "ssh -p ${SSH_PORT} -i ~/.ssh/id_ed25519" "$SRC" "${SSH_USER}@${SSH_HOST}":"${TARGET}.tmp/"
+          ssh -p "${SSH_PORT}" -i ~/.ssh/id_ed25519 "${SSH_USER}@${SSH_HOST}" \
             "rm -rf '${TARGET}.bak' && mv '${TARGET}' '${TARGET}.bak' 2>/dev/null || true && mv '${TARGET}.tmp' '${TARGET}' && rm -rf '${TARGET}.bak'"
 
-      - name: Compute public docs URL
-        id: puburl
-        shell: bash
-        run: |
-          echo "url=${DOCS_BASE_URL}/${REPO_SLUG}/${BRANCH_NAME}/index.html" >> "$GITHUB_OUTPUT"
-          echo "Public URL: ${{ steps.puburl.outputs.url }}"
-
-      - name: Update GitHub Wiki
+      - name: Update branch index + latest symlink (on server)
         shell: bash
         run: |
           set -euo pipefail
-          SAFE_BRANCH="$(printf '%s' "${BRANCH_NAME}" | tr '/:' '_-')"
-          WIKI_URL="https://x-access-token:${WIKI_TOKEN}@github.com/${REPO_SLUG}.wiki.git"
-          git config --global user.email "${WIKI_EMAIL}"
-          git config --global user.name  "${WIKI_NAME}"
-          rm -rf wiki && git clone "${WIKI_URL}" wiki
-          cd wiki
-          REPO_NAME="${REPO_SLUG#*/}"
-          cat > Home.md <<'MD'
-          # Project Documentation
-          This wiki updates automatically on each push. Full API docs are deployed per branch to our website.
-          - Use the Sidebar to jump to branches.
-          MD
-          cat > _Sidebar.md <<MD
-          # ${REPO_NAME} Wiki
-          - [[Home|Home]]
-          - Branch Docs
-            - [[${SAFE_BRANCH}|${BRANCH_NAME}]]
-          MD
-          cat > "${SAFE_BRANCH}.md" <<MD
-          # ${REPO_NAME} — ${BRANCH_NAME}
-          Latest generated API docs for \`${BRANCH_NAME}\`:
-          - **HTML site:** [Open docs](${{ steps.puburl.outputs.url }})
-          _Updated by CI on $(date -u +"%Y-%m-%d %H:%M:%S UTC")._
-          MD
-          git add -A
-          git commit -m "docs(wiki): update for ${BRANCH_NAME}" || true
-          git push
+          BASE="${REMOTE_BASE}/${REPO_SLUG}"
+          ssh -p "${SSH_PORT}" -i ~/.ssh/id_ed25519 "${SSH_USER}@${SSH_HOST}" bash -s <<'REMOTE'
+            set -euo pipefail
+            BASE="$0"; REPO_SLUG="$1"; BRANCH="$2"; DEFAULT="$3"
+            mkdir -p "$BASE"
+            # simple index listing available branches (relative links)
+            TMP="$(mktemp)"
+            {
+              echo '<!doctype html><meta charset="utf-8"><title>'"$REPO_SLUG"' branches</title>'
+              echo '<h1>'"$REPO_SLUG"' — Branches</h1><ul>'
+              for d in "$BASE"/*/; do
+                b=\$(basename "\$d")
+                [ "\$b" = "latest" ] && continue
+                echo "<li><a href=\"\$b/\">\$b</a></li>"
+              done
+              echo '</ul>'
+            } > "\$TMP"
+            mv "\$TMP" "$BASE/index.html"
+            # update 'latest' symlink when default branch builds
+            if [ "$BRANCH" = "$DEFAULT" ]; then
+              ln -sfn "$BRANCH" "$BASE/latest"
+            fi
+REMOTE
+          # pass args to remote heredoc
+        args: |
+          ${REMOTE_BASE}/${REPO_SLUG} ${REPO_SLUG} ${BRANCH_NAME} ${DEFAULT_BRANCH}
+
+      - name: Emit public URL
+        shell: bash
+        run: |
+          echo "Branch docs: ${DOCS_BASE_URL}/${REPO_SLUG}/${BRANCH_NAME}/index.html"
+          echo "Repo index : ${DOCS_BASE_URL}/${REPO_SLUG}/"
+          if [ "${BRANCH_NAME}" = "${DEFAULT_BRANCH}" ]; then
+            echo "Latest     : ${DOCS_BASE_URL}/${REPO_SLUG}/latest/"
+          fi
