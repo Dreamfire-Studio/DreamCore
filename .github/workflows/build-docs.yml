@@ -19,14 +19,10 @@ jobs:
       REPO_SLUG:     ${{ github.repository }}
       BRANCH_NAME:   ${{ github.ref_name }}
       REMOTE_BASE:   /srv/app/wiki
-
-      # Secrets → env
       SSH_HOST:      ${{ secrets.VPS_HOST }}
       SSH_USER:      ${{ secrets.VPS_USER }}
       SSH_PORT:      ${{ secrets.VPS_PORT || '22' }}
       WIKI_TOKEN:    ${{ secrets.WIKI_TOKEN }}
-
-      # Optional niceties
       WIKI_EMAIL:    ${{ secrets.WIKI_GIT_EMAIL || 'ci-bot@users.noreply.github.com' }}
       WIKI_NAME:     ${{ secrets.WIKI_GIT_NAME  || 'Docs CI Bot' }}
       DOCS_BASE_URL: ${{ secrets.DOCS_BASE_URL || 'http://89.117.36.132/docs' }}
@@ -43,10 +39,14 @@ jobs:
           set -e
           for v in SSH_HOST SSH_USER WIKI_TOKEN; do
             if [ -z "${!v}" ]; then
-              echo "::error title=Missing $v::$v is empty. Set the repository secret."
+              echo "::error title=Missing $v::$v is empty. Add the repository secret."
               exit 1
             fi
           done
+          if [ -z "${{ secrets.VPS_SSH_KEY_B64 }}" ]; then
+            echo "::error title=Missing VPS_SSH_KEY_B64::Add base64 of your *private* OpenSSH key (no passphrase)."
+            exit 1
+          fi
 
       - name: Install toolchain
         shell: bash
@@ -65,24 +65,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           if [ ! -f Doxyfile ]; then
             echo "::error title=Doxyfile missing::Add a Doxyfile at the repo root."
             exit 1
           fi
-
-          # Make config compatible and remove obsolete option
           doxygen -u Doxyfile || true
           sed -i '/^CLASS_DIAGRAMS[[:space:]]*=/d' Doxyfile || true
-
-          # Ensure OUTPUT_DIRECTORY points to ./docs/_doxygen
           if grep -q '^OUTPUT_DIRECTORY' Doxyfile; then
             sed -i 's|^OUTPUT_DIRECTORY[[:space:]]*=.*|OUTPUT_DIRECTORY = ./docs/_doxygen|' Doxyfile
           else
             printf '\nOUTPUT_DIRECTORY = ./docs/_doxygen\n' >> Doxyfile
           fi
-
-          # Recheck/create; if blocked, build in temp then copy back
           OUT="./docs/_doxygen"
           if ! install -d "$OUT/html"; then
             echo "::warning::Could not create $OUT; falling back to runner temp"
@@ -94,42 +87,37 @@ jobs:
           else
             CFG="Doxyfile"
           fi
-
           echo ">>> running doxygen to OUT=$OUT"
           doxygen "$CFG" 2>&1 | tee doxygen.log
-
           if [ "$OUT" != "./docs/_doxygen" ]; then
             mkdir -p ./docs/_doxygen
             rsync -a "$OUT/" ./docs/_doxygen/
           fi
-
           test -f ./docs/_doxygen/html/index.html || {
             echo "::error title=Docs not generated::Expected ./docs/_doxygen/html/index.html but it wasn't created."
             tail -n 200 doxygen.log || true
             exit 1
           }
-
           find ./docs/_doxygen/html -maxdepth 2 -type f | head -n 50 || true
 
-      - name: Prepare SSH
+      - name: Prepare SSH (decode base64 key)
         shell: bash
         env:
-          KEY: ${{ secrets.VPS_SSH_KEY }}
+          KEY_B64: ${{ secrets.VPS_SSH_KEY_B64 }}
         run: |
           set -euo pipefail
-          if [ -z "${KEY:-}" ]; then
-            echo "::error title=Missing key::VPS_SSH_KEY is not set (must be the *private* OpenSSH key, no passphrase)."
+          mkdir -p ~/.ssh
+          echo "$KEY_B64" | base64 -d > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          if ! ssh-keygen -y -f ~/.ssh/id_ed25519 >/dev/null 2>&1; then
+            echo "::error title=Unreadable key::Decoded private key invalid. Recreate base64 from your working key."
             exit 1
           fi
-          mkdir -p ~/.ssh
-          # normalize CRLF from Windows pastes
-          printf "%s" "$KEY" | tr -d '\r' > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -p "${SSH_PORT}" "${SSH_HOST}" >> ~/.ssh/known_hosts 2>/dev/null || true
           chmod 644 ~/.ssh/known_hosts
-
           echo ">>> Testing SSH connectivity (verbose)…"
-          ssh -vvv -i ~/.ssh/id_ed25519 -p "${SSH_PORT}" -o BatchMode=yes "${SSH_USER}@${SSH_HOST}" "echo ok"
+          ssh -vvv -i ~/.ssh/id_ed25519 -p "${SSH_PORT}" -o BatchMode=yes -o IdentitiesOnly=yes \
+            "${SSH_USER}@${SSH_HOST}" "echo ok"
 
       - name: Deploy HTML to VPS (branch-scoped, atomic)
         shell: bash
@@ -161,30 +149,23 @@ jobs:
           rm -rf wiki && git clone "${WIKI_URL}" wiki
           cd wiki
           REPO_NAME="${REPO_SLUG#*/}"
-
-          # Home
           cat > Home.md <<'MD'
           # Project Documentation
           This wiki updates automatically on each push. Full API docs are deployed per branch to our website.
           - Use the Sidebar to jump to branches.
           MD
-
-          # Sidebar (link to safe filename, display real branch)
           cat > _Sidebar.md <<MD
           # ${REPO_NAME} Wiki
           - [[Home|Home]]
           - Branch Docs
             - [[${SAFE_BRANCH}|${BRANCH_NAME}]]
           MD
-
-          # Branch page
           cat > "${SAFE_BRANCH}.md" <<MD
           # ${REPO_NAME} — ${BRANCH_NAME}
           Latest generated API docs for \`${BRANCH_NAME}\`:
           - **HTML site:** [Open docs](${{ steps.puburl.outputs.url }})
           _Updated by CI on $(date -u +"%Y-%m-%d %H:%M:%S UTC")._
           MD
-
           git add -A
           git commit -m "docs(wiki): update for ${BRANCH_NAME}" || true
           git push
