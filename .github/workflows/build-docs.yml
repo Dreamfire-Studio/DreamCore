@@ -1,4 +1,4 @@
-name: Build & Publish Docs (diagnostic)
+name: Build & Publish Docs
 
 on:
   push:
@@ -19,13 +19,13 @@ jobs:
       REPO_SLUG:   ${{ github.repository }}
       BRANCH_NAME: ${{ github.ref_name }}
 
-      # Mapped from repo secrets → become shell envs we can validate
+      # map repo secrets -> env
       SSH_HOST:    ${{ secrets.VPS_HOST }}
       SSH_USER:    ${{ secrets.VPS_USER }}
       SSH_PORT:    ${{ secrets.VPS_PORT || '22' }}
       WIKI_TOKEN:  ${{ secrets.WIKI_TOKEN }}
 
-      # Nice defaults
+      # defaults
       WIKI_EMAIL:  ${{ secrets.WIKI_GIT_EMAIL || 'ci-bot@users.noreply.github.com' }}
       WIKI_NAME:   ${{ secrets.WIKI_GIT_NAME  || 'Docs CI Bot' }}
       DOCS_BASE_URL: ${{ secrets.DOCS_BASE_URL || 'http://89.117.36.132/docs' }}
@@ -37,26 +37,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Print context
-        shell: bash
-        run: |
-          echo "REPO_SLUG=${REPO_SLUG}"
-          echo "BRANCH_NAME=${BRANCH_NAME}"
-          echo "WORKSPACE=$(pwd)"
-          ls -la
-
-      - name: Validate required env (from secrets)
+      - name: Validate required env/secrets
         shell: bash
         run: |
           set -e
-          missing=0
           for v in SSH_HOST SSH_USER WIKI_TOKEN; do
             if [ -z "${!v}" ]; then
-              echo "::error title=Missing $v::$v is empty. Set the corresponding secret in this repo (Settings → Secrets and variables → Actions)."
-              missing=1
+              echo "::error title=Missing $v::$v is empty. Add the corresponding repository secret."
+              exit 1
             fi
           done
-          if [ "$missing" -ne 0 ]; then exit 1; fi
+          echo "✓ required secrets present"
 
       - name: Install toolchain
         shell: bash
@@ -64,34 +55,74 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y doxygen graphviz rsync openssh-client
 
-      - name: Show Doxygen version
+      - name: Prepare docs output folder
         shell: bash
-        run: doxygen -v || true
+        run: |
+          set -euo pipefail
+          mkdir -p docs/_doxygen/html
+          ls -ld docs docs/_doxygen docs/_doxygen/html || true
 
       - name: Build docs (Doxygen)
         shell: bash
         run: |
+          set -euo pipefail
+
           if [ ! -f Doxyfile ]; then
-            echo "::error title=Doxyfile missing::Add a Doxyfile at the repo root."; exit 1
+            echo "::error title=Doxyfile missing::Add a Doxyfile at the repo root."
+            exit 1
           fi
-          echo ">>> running doxygen"
-          doxygen Doxyfile 2>&1 | tee doxygen.log
-          echo ">>> listing docs output"
-          if [ -d docs/_doxygen/html ]; then
-            find docs/_doxygen/html -maxdepth 2 -type f | head -n 50
+
+          # Make config compatible with runner doxygen and remove obsolete option
+          doxygen -u Doxyfile || true
+          sed -i '/^CLASS_DIAGRAMS[[:space:]]*=/d' Doxyfile || true
+
+          # Ensure OUTPUT_DIRECTORY is set to our path (with safe leading ./)
+          if grep -q '^OUTPUT_DIRECTORY' Doxyfile; then
+            sed -i 's|^OUTPUT_DIRECTORY[[:space:]]*=.*|OUTPUT_DIRECTORY = ./docs/_doxygen|' Doxyfile
           else
-            echo "::error title=Docs not generated::Expected docs/_doxygen/html but it does not exist."
-            echo "Dumping last 200 lines of doxygen.log:"
+            printf '\nOUTPUT_DIRECTORY = ./docs/_doxygen\n' >> Doxyfile
+          fi
+
+          # Try to create again; if still blocked, build in temp and copy back
+          OUT="./docs/_doxygen"
+          if ! install -d "$OUT/html"; then
+            echo "::warning::Could not create $OUT; falling back to runner temp"
+            OUT="$RUNNER_TEMP/doxygen_out"
+            install -d "$OUT/html"
+            cp Doxyfile Doxyfile.effective
+            sed -i "s|^OUTPUT_DIRECTORY[[:space:]]*=.*|OUTPUT_DIRECTORY = $OUT|" Doxyfile.effective
+            CFG="Doxyfile.effective"
+          else
+            CFG="Doxyfile"
+          fi
+
+          echo ">>> running doxygen to OUT=$OUT"
+          doxygen "$CFG" 2>&1 | tee doxygen.log
+
+          # If we used temp output, copy into repo path for later deploy
+          if [ "$OUT" != "./docs/_doxygen" ]; then
+            mkdir -p ./docs/_doxygen
+            rsync -a "$OUT/" ./docs/_doxygen/
+          fi
+
+          if [ ! -f ./docs/_doxygen/html/index.html ]; then
+            echo "::error title=Docs not generated::Expected ./docs/_doxygen/html/index.html but it wasn't created."
             tail -n 200 doxygen.log || true
             exit 1
           fi
+
+          find ./docs/_doxygen/html -maxdepth 2 -type f | head -n 50 || true
 
       - name: Prepare SSH
         shell: bash
         env:
           KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
-          if [ -z "$KEY" ]; then echo "::error title=Missing key::VPS_SSH_KEY is not set."; exit 1; fi
+          set -euo pipefail
+          if [ -z "$KEY" ]; then
+            echo "::error title=Missing key::VPS_SSH_KEY is not set."
+            exit 1
+          fi
           mkdir -p ~/.ssh
           printf "%s" "$KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
@@ -100,13 +131,14 @@ jobs:
 
           echo "Testing SSH connectivity to ${SSH_USER}@${SSH_HOST}:${SSH_PORT} ..."
           if ! ssh -i ~/.ssh/id_ed25519 -p "${SSH_PORT}" -o BatchMode=yes -o ConnectTimeout=10 "${SSH_USER}@${SSH_HOST}" "echo ok"; then
-            echo "::error title=SSH failed::Check VPS_SSH_KEY, VPS_HOST, VPS_USER, firewall, and that /home/${SSH_USER}/.ssh/authorized_keys contains the public key."
+            echo "::error title=SSH failed::Check VPS_SSH_KEY, VPS_HOST, VPS_USER, firewall, and that /home/${SSH_USER}/.ssh/authorized_keys contains the matching public key."
             exit 1
           fi
 
       - name: Deploy HTML to VPS (branch-scoped, atomic)
         shell: bash
         run: |
+          set -euo pipefail
           SRC="docs/_doxygen/html/"
           TARGET="${REMOTE_BASE}/${REPO_SLUG}/${BRANCH_NAME}"
           echo "Deploying ${SRC} -> ${SSH_HOST}:${TARGET}"

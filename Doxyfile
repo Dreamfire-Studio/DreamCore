@@ -6,7 +6,7 @@
 
 # Project
 PROJECT_NAME           = Dreamfire Docs
-OUTPUT_DIRECTORY       = docs/_doxygen
+OUTPUT_DIRECTORY       = ./docs/_doxygen
 GENERATE_HTML          = YES
 HTML_OUTPUT            = html
 GENERATE_LATEX         = NO
