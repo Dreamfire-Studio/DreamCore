@@ -100,7 +100,7 @@ public final class DreamChat {
         for (var player : Bukkit.getOnlinePlayers()){
             var luckPermsUser = DreamLuckPerms.getUser(player);
             var cleanMessage = DreamMessageFormatter.format(message, player, settings);
-            if (DreamLuckPerms.hasPermission(luckPermsUser, permission)) {
+            if (DreamLuckPerms.hasPermission(luckPermsUser, permission.toString())) {
                 SendMessageToPlayer(player, PlainTextComponentSerializer.plainText().serialize(cleanMessage), settings);
             }
         }

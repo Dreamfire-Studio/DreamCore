@@ -76,6 +76,7 @@ com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentEntityAddedEvent.cl
 com\dreamfirestudios\dreamcore\DreamSmartInvs\InventoryManager.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandAnimationFrameDataBuilder.class
 com\dreamfirestudios\dreamcore\DreamFile\DreamDir.class
+com\dreamfirestudios\dreamcore\DreamJava\DreamClassAPI$VariableTestAdapter.class
 com\dreamfirestudios\dreamcore\DreamCam\LookAtType.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\DreamLocationLimiter.class
 com\dreamfirestudios\dreamcore\DreamScoreboard\DreamScoreboardLines$PulseScoreboardLinesBuilder.class
@@ -84,7 +85,6 @@ com\dreamfirestudios\dreamcore\DreamScoreboard\ScoreboardPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamEnchantment\DreamEnchantmentRegistry.class
 com\dreamfirestudios\dreamcore\DreamLuckPerms\DreamLuckPerms.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathStartEvent.class
-com\dreamfirestudios\dreamcore\DreamJava\DreamClassAPI$1.class
 com\dreamfirestudios\dreamcore\DreamMessagingChannel\DreamPluginMessage.class
 com\dreamfirestudios\dreamcore\DreamVanish\VanishShowTargetEvent.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBar$Builder.class

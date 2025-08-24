@@ -45,21 +45,19 @@ import java.util.UUID;
  * <ul>
  *   <li>{@link #getUser(Player)} uses the LuckPerms player adapter and will return a non-null {@link User} for online players.</li>
  *   <li>{@link #getUser(UUID)} may return {@code null} if the user is not loaded; use the UserManager to load if needed.</li>
- *   <li>Permission checks in {@link #hasPermission(User, Enum)} use cached data; ensure caches are up-to-date after mutations.</li>
+ *   <li>Permission checks in {@link #hasPermission(User, String)} use cached data; ensure caches are up-to-date after mutations.</li>
  * </ul>
  * </remarks>
  *
  * <example>
  * <code>
- * // Example: add the "MY_PERMISSION" enum constant to a user by UUID
- * enum MyPerms { MY_PERMISSION }
- *
+ * // Example: add a permission by node string
  * UUID uuid = player.getUniqueId();
- * DreamLuckPerms.addPermission(uuid, MyPerms.MY_PERMISSION);
+ * DreamLuckPerms.addPermission(uuid, "myplugin.feature.use");
  *
  * // Example: check a user's cached permission status
  * User user = DreamLuckPerms.getUser(player);
- * boolean allowed = DreamLuckPerms.hasPermission(user, MyPerms.MY_PERMISSION);
+ * boolean allowed = DreamLuckPerms.hasPermission(user, "myplugin.feature.use");
  * </code>
  * </example>
  */
@@ -69,81 +67,75 @@ public final class DreamLuckPerms {
 
     /**
      * <summary>
-     * Simple result object for group queries, carrying success flag, parsed enum, and raw string.
+     * Result object for group queries, carrying success flag and the matched group name.
      * </summary>
      *
-     * <typeparam name="T">Enum type representing known groups.</typeparam>
      * <remarks>
-     * When {@code success} is {@code false}, {@code enumValue} and {@code rawValue} will be {@code null}.
+     * When {@code success} is {@code false}, {@code groupName} will be {@code null}.
      * </remarks>
      */
-    public record GroupResult<T>(boolean success, T enumValue, String rawValue) {}
+    public record GroupResult(boolean success, String groupName) {}
 
     /**
      * <summary>
      * Checks if a player is in a given group by testing the conventional {@code group.&lt;name&gt;} permission.
      * </summary>
      *
-     * <typeparam name="T">Enum type used to represent the group name.</typeparam>
      * <param name="player">The Bukkit player to test.</param>
-     * <param name="group">The enum constant whose {@code toString()} name is used.</param>
-     * <returns>True if the player has {@code group.&lt;enumName&gt;} permission, otherwise false.</returns>
+     * <param name="groupName">The group name (used verbatim in the node: {@code group.&lt;groupName&gt;}).</param>
+     * <returns>True if the player has {@code group.&lt;groupName&gt;} permission, otherwise false.</returns>
      *
      * <remarks>
      * This uses Bukkit's {@link Player#hasPermission(String)} which may be backed by LuckPerms.
-     * The tested node is derived as {@code "group." + group}. If your enum name casing differs from
-     * actual group identifiers, prefer {@link #tryGetPlayerGroup(Player, Class)} or a direct LuckPerms query.
+     * The tested node is derived as {@code "group." + groupName} with no case normalization.
      * </remarks>
      *
      * <example>
      * <code>
-     * enum Ranks { ADMIN, MOD, MEMBER }
-     * boolean isAdmin = DreamLuckPerms.isPlayerInGroup(player, Ranks.ADMIN);
+     * boolean isAdmin = DreamLuckPerms.isPlayerInGroup(player, "admin");
      * </code>
      * </example>
      */
-    public static <T extends Enum<T>> boolean isPlayerInGroup(Player player, T group) {
-        return player.hasPermission("group." + group);
+    public static boolean isPlayerInGroup(Player player, String groupName) {
+        return player.hasPermission("group." + groupName);
     }
 
     /**
      * <summary>
-     * Attempts to determine which enum-based group a player belongs to by scanning {@code group.&lt;name&gt;} permissions.
+     * Attempts to determine which group (from provided candidates) a player belongs to
+     * by scanning {@code group.&lt;name&gt;} permissions.
      * </summary>
      *
-     * <typeparam name="T">Enum type to scan.</typeparam>
      * <param name="player">Player whose groups should be examined.</param>
-     * <param name="enumClass">The enum class containing all candidate group constants.</param>
+     * <param name="candidateGroupNames">Candidate group names to test, in priority order.</param>
      * <returns>
-     * A {@link GroupResult} whose {@code success} is true when any constant matches;
-     * the matching enum value and raw group name (lowercase) are included.
+     * A {@link GroupResult} whose {@code success} is true when any candidate matches;
+     * the matching group name is included.
      * </returns>
      *
      * <remarks>
-     * This method converts each enum constant to a lowercase string and checks
-     * {@code player.hasPermission("group." + lowercaseConstant)}. It returns the first match.
-     * If multiple group permissions are present, the earliest enum constant wins.
+     * Each candidate is used verbatim as {@code "group." + candidate}. The first match is returned.
      * </remarks>
      *
      * <example>
      * <code>
-     * enum Rank { ADMIN, MODERATOR, MEMBER }
-     * var result = DreamLuckPerms.tryGetPlayerGroup(player, Rank.class);
+     * var result = DreamLuckPerms.tryGetPlayerGroup(player, "admin", "moderator", "member");
      * if (result.success()) {
-     *     Rank rank = result.enumValue();
-     *     // handle rank-specific logic
+     *     String group = result.groupName();
+     *     // handle group-specific logic
      * }
      * </code>
      * </example>
      */
-    public static <T extends Enum<T>> GroupResult<T> tryGetPlayerGroup(Player player, Class<T> enumClass) {
-        for (T constant : enumClass.getEnumConstants()) {
-            String groupName = constant.name().toLowerCase();
-            if (player.hasPermission("group." + groupName)) {
-                return new GroupResult<>(true, constant, groupName);
+    public static GroupResult tryGetPlayerGroup(Player player, String... candidateGroupNames) {
+        if (candidateGroupNames != null) {
+            for (String name : candidateGroupNames) {
+                if (name != null && player.hasPermission("group." + name)) {
+                    return new GroupResult(true, name);
+                }
             }
         }
-        return new GroupResult<>(false, null, null);
+        return new GroupResult(false, null);
     }
 
     /**
@@ -183,64 +175,48 @@ public final class DreamLuckPerms {
 
     /**
      * <summary>
-     * Gets a LuckPerms {@link Group} by enum name.
+     * Gets a LuckPerms {@link Group} by name.
      * </summary>
      *
-     * <typeparam name="T">Enum type whose {@code toString()} maps to a LuckPerms group name.</typeparam>
-     * <param name="groupName">Enum constant naming the target group.</param>
+     * <param name="groupName">The LuckPerms group name.</param>
      * <returns>The {@link Group} or {@code null} if not found.</returns>
-     *
-     * <remarks>
-     * This simply calls {@code getGroupManager().getGroup(enum.toString())}. If your
-     * group identifiers do not match {@code toString()}, provide a mapping layer.
-     * </remarks>
      */
-    public static <T extends Enum<T>> Group getGroup(T groupName) {
-        return DreamCore.LuckPerms.getGroupManager().getGroup(groupName.toString());
+    public static Group getGroup(String groupName) {
+        return DreamCore.LuckPerms.getGroupManager().getGroup(groupName);
     }
 
     /**
      * <summary>
-     * Adds a string-based permission (from enum) to the provided {@link User} and saves it.
+     * Adds a string-based permission node to the provided {@link User} and saves it.
      * </summary>
      *
-     * <typeparam name="T">Enum type representing a permission node.</typeparam>
      * <param name="user">The LuckPerms user to modify.</param>
-     * <param name="permission">Enum constant whose {@code toString()} is the node key.</param>
+     * <param name="permissionNode">Permission node key (e.g., {@code "myplugin.feature.use"}).</param>
      *
      * <remarks>
-     * This method performs an immediate {@code saveUser(user)} after adding the node.
+     * Performs an immediate {@code saveUser(user)} after adding the node.
      * </remarks>
-     *
-     * <example>
-     * <code>
-     * enum MyPerms { FEATURE_USE }
-     * User user = DreamLuckPerms.getUser(player);
-     * DreamLuckPerms.addPermission(user, MyPerms.FEATURE_USE);
-     * </code>
-     * </example>
      */
-    public static <T extends Enum<T>> void addPermission(User user, T permission) {
-        user.data().add(Node.builder(permission.toString()).build());
+    public static void addPermission(User user, String permissionNode) {
+        user.data().add(Node.builder(permissionNode).build());
         DreamCore.LuckPerms.getUserManager().saveUser(user);
     }
 
     /**
      * <summary>
-     * Adds a string-based permission (from enum) to a user referenced by UUID.
+     * Adds a string-based permission node to a user referenced by UUID.
      * </summary>
      *
-     * <typeparam name="T">Enum type representing a permission node.</typeparam>
      * <param name="playerUUID">Target user's UUID.</param>
-     * <param name="permission">Enum constant whose {@code toString()} is the node key.</param>
+     * <param name="permissionNode">Permission node key.</param>
      *
      * <remarks>
      * Uses {@code modifyUser} which handles load-modify-save safely, even if the user is not currently loaded.
      * </remarks>
      */
-    public static <T extends Enum<T>> void addPermission(UUID playerUUID, T permission) {
+    public static void addPermission(UUID playerUUID, String permissionNode) {
         DreamCore.LuckPerms.getUserManager().modifyUser(playerUUID, user -> {
-            user.data().add(Node.builder(permission.toString()).build());
+            user.data().add(Node.builder(permissionNode).build());
         });
     }
 
@@ -282,12 +258,11 @@ public final class DreamLuckPerms {
 
     /**
      * <summary>
-     * Checks whether a {@link User} has a given enum-based permission according to cached data.
+     * Checks whether a {@link User} has a given string-based permission according to cached data.
      * </summary>
      *
-     * <typeparam name="T">Enum type representing the permission node.</typeparam>
      * <param name="user">The LuckPerms user to check.</param>
-     * <param name="permission">Enum constant whose {@code toString()} is the node key.</param>
+     * <param name="permissionNode">Permission node key.</param>
      * <returns>True if the cached permission data evaluates the node to allowed, else false.</returns>
      *
      * <remarks>
@@ -295,7 +270,16 @@ public final class DreamLuckPerms {
      * After modifying permissions, ensure caches are updated or re-queried for accurate results.
      * </remarks>
      */
-    public static <T extends Enum<T>> boolean hasPermission(User user, T permission) {
-        return user.getCachedData().getPermissionData().checkPermission(permission.toString()).asBoolean();
+    public static boolean hasPermission(User user, String permissionNode) {
+        return user.getCachedData().getPermissionData().checkPermission(permissionNode).asBoolean();
+    }
+
+    /**
+     * <summary>
+     * Alias of {@link #hasPermission(User, String)} for backwards compatibility.
+     * </summary>
+     */
+    public static boolean hasStringPermission(User user, String permission) {
+        return hasPermission(user, permission);
     }
 }
