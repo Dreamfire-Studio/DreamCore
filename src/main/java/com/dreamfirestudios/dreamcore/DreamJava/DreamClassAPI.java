@@ -28,12 +28,13 @@ import com.dreamfirestudios.dreamcore.DreamChat.DreamChat;
 import com.dreamfirestudios.dreamcore.DreamChat.DreamMessageSettings;
 import com.dreamfirestudios.dreamcore.DreamCore;
 import com.dreamfirestudios.dreamcore.DreamEnchantment.IDreamEnchantment;
-import com.dreamfirestudios.dreamcore.DreamHologram.DreamHologram; // (import retained even if unused by compiler settings)
+import com.dreamfirestudios.dreamcore.DreamHologram.DreamHologram; // retained even if unused by compiler settings
 import com.dreamfirestudios.dreamcore.DreamItems.IDreamItemStack;
 import com.dreamfirestudios.dreamcore.DreamLoop.IDreamLoop;
 import com.dreamfirestudios.dreamcore.DreamMessagingChannel.PluginMessageLibrary;
 import com.dreamfirestudios.dreamcore.DreamPlaceholder.IDreamPlaceholder;
 import com.dreamfirestudios.dreamcore.DreamRecipe.IDreamRecipe;
+import com.dreamfirestudios.dreamcore.DreamVariable.DreamAbstractVariableTest;
 import com.dreamfirestudios.dreamcore.DreamVariable.DreamVariableTest;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -41,16 +42,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 /// <summary>
-/// Central auto‑registration hub for Dreamfire “components” discovered via <see cref="PulseAutoRegister"/>.
+/// Central auto-registration hub for Dreamfire components discovered via <see cref="PulseAutoRegister"/>.
 /// </summary>
 /// <remarks>
-/// This class scans your plugin JAR for annotated classes and registers them
-/// according to their implemented interfaces (e.g., <see cref="IDreamLoop"/>, <see cref="Listener"/>, <see cref="PacketAdapter"/>).
-/// <para>All registrations log to console via <see cref="DreamChat"/>.</para>
+/// Scans plugin classes and, for the first matching marker interface, performs the mapped registration action.
+/// Logs each registration via <see cref="DreamChat"/>.
 /// </remarks>
 /// <example>
 /// <code>
@@ -58,37 +59,31 @@ import java.util.function.BiConsumer;
 /// DreamClassAPI.RegisterClasses(this);
 /// </code>
 /// </example>
-public class DreamClassAPI {
+public final class DreamClassAPI {
+
+    private DreamClassAPI() { }
 
     /// <summary>
-    /// Mapping of “marker” interface → registration action.
+    /// Mapping of marker interface → registration action.
     /// </summary>
-    /// <remarks>
-    /// Each action receives the plugin instance and a newly constructed object instance.
-    /// The first matching entry (via <c>isAssignableFrom</c>) is used.
-    /// </remarks>
     private static final Map<Class<?>, BiConsumer<JavaPlugin, Object>> registrationActions = new HashMap<>();
 
     static {
-        registrationActions.put(IDreamLoop.class, (javaPlugin, instance) -> RegisterPulseLoop(javaPlugin, (IDreamLoop) instance));
-        registrationActions.put(PacketAdapter.class, (javaPlugin, instance) -> RegisterPacketAdapter(javaPlugin, (PacketAdapter) instance));
-        registrationActions.put(IDreamEnchantment.class, (javaPlugin, instance) -> RegisterDreamEnchantment(javaPlugin, (IDreamEnchantment) instance));
-        registrationActions.put(Listener.class, (javaPlugin, instance) -> RegisterListener(javaPlugin, (Listener) instance));
-        registrationActions.put(IDreamPlaceholder.class, (javaPlugin, instance) -> RegisterPulsePlaceholder(javaPlugin, (IDreamPlaceholder) instance));
-        registrationActions.put(IDreamItemStack.class, (javaPlugin, instance) -> RegisterIDreamItemStack(javaPlugin, (IDreamItemStack) instance));
-        registrationActions.put(IDreamRecipe.class, (javaPlugin, instance) -> RegisterPulseRecipe(javaPlugin, (IDreamRecipe) instance));
-        registrationActions.put(DreamVariableTest.class, (javaPlugin, instance) -> RegisterPulseVariableTest(javaPlugin, (DreamVariableTest) instance));
-        registrationActions.put(PluginMessageLibrary.class, (javaPlugin, instance) -> RegisterPluginMessageListener(javaPlugin, (PluginMessageLibrary) instance));
+        registrationActions.put(IDreamLoop.class, (plugin, instance) -> RegisterPulseLoop(plugin, (IDreamLoop) instance));
+        registrationActions.put(PacketAdapter.class, (plugin, instance) -> RegisterPacketAdapter(plugin, (PacketAdapter) instance));
+        registrationActions.put(IDreamEnchantment.class, (plugin, instance) -> RegisterDreamEnchantment(plugin, (IDreamEnchantment) instance));
+        registrationActions.put(Listener.class, (plugin, instance) -> RegisterListener(plugin, (Listener) instance));
+        registrationActions.put(IDreamPlaceholder.class, (plugin, instance) -> RegisterPulsePlaceholder(plugin, (IDreamPlaceholder) instance));
+        registrationActions.put(IDreamItemStack.class, (plugin, instance) -> RegisterIDreamItemStack(plugin, (IDreamItemStack) instance));
+        registrationActions.put(IDreamRecipe.class, (plugin, instance) -> RegisterPulseRecipe(plugin, (IDreamRecipe) instance));
+        // Legacy variable tests
+        registrationActions.put(DreamVariableTest.class, (plugin, instance) -> RegisterPulseVariableTest(plugin, (DreamVariableTest) instance));
+        // New variable tests (generic)
+        registrationActions.put(DreamAbstractVariableTest.class, (plugin, instance) -> RegisterPulseVariableTest(plugin, (DreamAbstractVariableTest<?>) instance));
+        registrationActions.put(PluginMessageLibrary.class, (plugin, instance) -> RegisterPluginMessageListener(plugin, (PluginMessageLibrary) instance));
     }
 
-    /// <summary>
-    /// Discovers and registers all annotated classes. Exceptions are wrapped as <see cref="RuntimeException"/>.
-    /// </summary>
-    /// <param name="javaPlugin">Calling plugin.</param>
-    /// <remarks>Calls <see cref="RegisterClassesRaw(JavaPlugin)"/> internally and wraps reflection exceptions.</remarks>
-    /// <example>
-    /// <code>DreamClassAPI.RegisterClasses(this);</code>
-    /// </example>
+    /// <summary>Registers all discovered classes (wrapped exceptions).</summary>
     public static void RegisterClasses(JavaPlugin javaPlugin){
         try { RegisterClassesRaw(javaPlugin); }
         catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
@@ -96,20 +91,7 @@ public class DreamClassAPI {
         }
     }
 
-    /// <summary>
-    /// Discovers and registers annotated classes, propagating reflection errors.
-    /// </summary>
-    /// <param name="javaPlugin">Calling plugin.</param>
-    /// <exception cref="NoSuchMethodException">No default constructor found.</exception>
-    /// <exception cref="InvocationTargetException">Constructor threw an exception.</exception>
-    /// <exception cref="InstantiationException">Class cannot be instantiated.</exception>
-    /// <exception cref="IllegalAccessException">Constructor not accessible.</exception>
-    /// <remarks>
-    /// For each discovered class, the first matching entry in <see cref="#registrationActions"/> is applied.
-    /// </remarks>
-    /// <example>
-    /// <code>DreamClassAPI.RegisterClassesRaw(plugin);</code>
-    /// </example>
+    /// <summary>Registers all discovered classes (propagates reflection errors).</summary>
     public static void RegisterClassesRaw(JavaPlugin javaPlugin)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         try {
@@ -118,7 +100,7 @@ public class DreamClassAPI {
                     if (entry.getKey().isAssignableFrom(autoRegisterClass)) {
                         Object instance = autoRegisterClass.getConstructor().newInstance();
                         entry.getValue().accept(javaPlugin, instance);
-                        break; // Stop checking after the first successful match
+                        break; // first match wins
                     }
                 }
             }
@@ -128,143 +110,127 @@ public class DreamClassAPI {
         }
     }
 
-    /// <summary>
-    /// Registers an <see cref="IDreamLoop"/>: starts it, schedules repeating task, records ID.
-    /// </summary>
-    /// <param name="javaPlugin">Plugin for scheduler.</param>
-    /// <param name="iDreamLoop">Loop implementation.</param>
-    /// <remarks>
-    /// Schedules using <c>scheduleSyncRepeatingTask</c> with the loop’s start delay and interval.
-    /// </remarks>
-    /// <example>
-    /// <code>DreamClassAPI.RegisterPulseLoop(plugin, new MyLoop());</code>
-    /// </example>
+    // ============================ REGISTRATIONS ============================
+
     public static void RegisterPulseLoop(JavaPlugin javaPlugin, IDreamLoop iDreamLoop){
         iDreamLoop.Start();
-        int finalId = Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
-            @Override
-            public void run() {
-                iDreamLoop.Loop();
-            }
-        }, iDreamLoop.StartDelay(), iDreamLoop.LoopInterval());
+        int finalId = Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, iDreamLoop::Loop, iDreamLoop.StartDelay(), iDreamLoop.LoopInterval());
         iDreamLoop.PassID(finalId);
         DreamCore.IDreamLoops.put(iDreamLoop.ReturnID(), iDreamLoop);
         DreamChat.SendMessageToConsole(String.format("&8Registered Loop: %s", iDreamLoop.ReturnID()), DreamMessageSettings.all());
     }
 
-    /// <summary>
-    /// Registers a ProtocolLib <see cref="PacketAdapter"/>.
-    /// </summary>
-    /// <param name="javaPlugin">Plugin instance (unused but consistent signature).</param>
-    /// <param name="packetAdapter">Adapter to add to ProtocolManager.</param>
-    /// <example>
-    /// <code>DreamClassAPI.RegisterPacketAdapter(plugin, new MyAdapter(plugin));</code>
-    /// </example>
     public static void RegisterPacketAdapter(JavaPlugin javaPlugin, PacketAdapter packetAdapter) {
         DreamCore.ProtocolManager.addPacketListener(packetAdapter);
         DreamChat.SendMessageToConsole(String.format("&8Registered PacketAdapter: %s", packetAdapter.getClass().getSimpleName()), DreamMessageSettings.all());
     }
 
-    /// <summary>
-    /// Registers a Bukkit <see cref="Listener"/>.
-    /// </summary>
-    /// <param name="javaPlugin">Owning plugin.</param>
-    /// <param name="listener">Listener instance.</param>
-    /// <example>
-    /// <code>DreamClassAPI.RegisterListener(plugin, new MyListener());</code>
-    /// </example>
     public static void RegisterListener(JavaPlugin javaPlugin, Listener listener){
         Bukkit.getPluginManager().registerEvents(listener, javaPlugin);
         DreamChat.SendMessageToConsole(String.format("&8Registered Listener: %s", listener.getClass().getSimpleName()), DreamMessageSettings.all());
     }
 
-    /// <summary>
-    /// Registers a custom enchantment with DreamCore’s registry.
-    /// </summary>
-    /// <param name="javaPlugin">Owning plugin.</param>
-    /// <param name="pulseEnchantment">Enchantment implementation.</param>
-    /// <example>
-    /// <code>DreamClassAPI.RegisterDreamEnchantment(plugin, new FrostbiteEnchant());</code>
-    /// </example>
-    public static void RegisterDreamEnchantment(JavaPlugin javaPlugin, IDreamEnchantment pulseEnchantment){
-        DreamCore.IDreamEnchantments.add(pulseEnchantment);
-        DreamChat.SendMessageToConsole(String.format("&8Registered DreamEnchantment: %s", pulseEnchantment.getName()), DreamMessageSettings.all());
+    public static void RegisterDreamEnchantment(JavaPlugin javaPlugin, IDreamEnchantment enchant){
+        DreamCore.IDreamEnchantments.add(enchant);
+        DreamChat.SendMessageToConsole(String.format("&8Registered DreamEnchantment: %s", enchant.getName()), DreamMessageSettings.all());
+    }
+
+    public static void RegisterPulsePlaceholder(JavaPlugin javaPlugin, IDreamPlaceholder placeholder){
+        DreamCore.DreamPlaceholderManager.register(placeholder);
+        DreamChat.SendMessageToConsole(String.format("&8Registered IDreamPlaceholder: %s", placeholder.getClass().getSimpleName()), DreamMessageSettings.all());
+    }
+
+    public static void RegisterPulseRecipe(JavaPlugin javaPlugin, IDreamRecipe recipe){
+        Bukkit.addRecipe(recipe.ReturnRecipe(javaPlugin));
+        DreamChat.SendMessageToConsole(String.format("&8Registered IDreamRecipe: %s", recipe.getClass().getSimpleName()), DreamMessageSettings.all());
+    }
+
+    public static void RegisterIDreamItemStack(JavaPlugin javaPlugin, IDreamItemStack def){
+        DreamCore.IDreamItemStacks.add(def);
+        DreamChat.SendMessageToConsole(String.format("&8Registered IDreamItemStack: %s", def.getClass().getSimpleName()), DreamMessageSettings.all());
     }
 
     /// <summary>
-    /// Registers an <see cref="IDreamPlaceholder"/> with the placeholder manager.
+    /// Registers a legacy <see cref="DreamVariableTest"/> against all its declared supported types.
     /// </summary>
-    /// <param name="javaPlugin">Owning plugin.</param>
-    /// <param name="iDreamPlaceholder">Placeholder provider.</param>
-    /// <example>
-    /// <code>DreamClassAPI.RegisterPulsePlaceholder(plugin, new ServerTPSPlaceholder());</code>
-    /// </example>
-    public static void RegisterPulsePlaceholder(JavaPlugin javaPlugin, IDreamPlaceholder iDreamPlaceholder){
-        DreamCore.DreamPlaceholderManager.register(iDreamPlaceholder);
-        DreamChat.SendMessageToConsole(String.format("&8Registered IDreamPlaceholder: %s", iDreamPlaceholder.getClass().getSimpleName()), DreamMessageSettings.all());
-    }
-
-    /// <summary>
-    /// Registers a recipe via Bukkit.
-    /// </summary>
-    /// <param name="javaPlugin">Owning plugin.</param>
-    /// <param name="iDreamRecipe">Recipe definition.</param>
-    /// <example>
-    /// <code>DreamClassAPI.RegisterPulseRecipe(plugin, new SuperPickaxeRecipe());</code>
-    /// </example>
-    public static void RegisterPulseRecipe(JavaPlugin javaPlugin, IDreamRecipe iDreamRecipe){
-        Bukkit.addRecipe(iDreamRecipe.ReturnRecipe(javaPlugin));
-        DreamChat.SendMessageToConsole(String.format("&8Registered IDreamRecipe: %s", iDreamRecipe.getClass().getSimpleName()), DreamMessageSettings.all());
-    }
-
-    /// <summary>
-    /// Registers a custom item definition for global access.
-    /// </summary>
-    /// <param name="javaPlugin">Owning plugin.</param>
-    /// <param name="iDreamItemStack">Item definition.</param>
-    /// <example>
-    /// <code>DreamClassAPI.RegisterIDreamItemStack(plugin, new TeleportCharm());</code>
-    /// </example>
-    public static void RegisterIDreamItemStack(JavaPlugin javaPlugin, IDreamItemStack iDreamItemStack){
-        DreamCore.IDreamItemStacks.add(iDreamItemStack);
-        DreamChat.SendMessageToConsole(String.format("&8Registered IDreamItemStack: %s", iDreamItemStack.getClass().getSimpleName()), DreamMessageSettings.all());
-    }
-
-    /// <summary>
-    /// Registers a <see cref="DreamVariableTest"/> against its supported class types.
-    /// </summary>
-    /// <param name="javaPlugin">Owning plugin.</param>
-    /// <param name="dreamfireVariableTest">Variable test implementation.</param>
-    /// <remarks>Each returned class type is mapped to the same tester instance in <see cref="DreamCore#DreamVariableTests"/>.</remarks>
-    /// <example>
-    /// <code>DreamClassAPI.RegisterPulseVariableTest(plugin, new BoolTest());</code>
-    /// </example>
-    public static void RegisterPulseVariableTest(JavaPlugin javaPlugin, DreamVariableTest dreamfireVariableTest){
-        DreamChat.SendMessageToConsole(String.format("&8Registered DreamVariableTest: %s", dreamfireVariableTest.getClass().getSimpleName()), DreamMessageSettings.all());
-        for(var classType : dreamfireVariableTest.ClassTypes()){
-            DreamCore.DreamVariableTests.put(classType, dreamfireVariableTest);
+    public static void RegisterPulseVariableTest(JavaPlugin javaPlugin, DreamVariableTest legacyTest){
+        DreamChat.SendMessageToConsole(String.format("&8Registered DreamVariableTest (legacy): %s", legacyTest.getClass().getSimpleName()), DreamMessageSettings.all());
+        for (var classType : legacyTest.ClassTypes()){
+            DreamCore.DreamVariableTests.put(classType, legacyTest);
         }
     }
 
     /// <summary>
-    /// Registers a plugin messaging listener on a named channel.
+    /// Registers a new-style <see cref="DreamAbstractVariableTest"/> by adapting it to the legacy registry.
     /// </summary>
     /// <param name="javaPlugin">Owning plugin.</param>
-    /// <param name="pluginMessageListener">Listener providing channel name and handler.</param>
+    /// <param name="test">New-style variable test.</param>
     /// <remarks>
-    /// Registers both outgoing and incoming plugin channels. Logs success/failure to console.
+    /// To avoid core changes, we wrap <paramref name="test"/> with a lightweight adapter that implements
+    /// <see cref="DreamVariableTest"/> and delegates to the generic implementation. This keeps all existing
+    /// consumers functional while you migrate code incrementally.
     /// </remarks>
-    /// <example>
-    /// <code>DreamClassAPI.RegisterPluginMessageListener(plugin, new BungeeBridge());</code>
-    /// </example>
+    public static void RegisterPulseVariableTest(JavaPlugin javaPlugin, DreamAbstractVariableTest<?> test){
+        DreamVariableTest adapter = new VariableTestAdapter(test);
+        DreamChat.SendMessageToConsole(String.format("&8Registered DreamAbstractVariableTest: %s &8→ adapter bound (%s)",
+                test.getClass().getSimpleName(), test.persistentType()), DreamMessageSettings.all());
+        for (Class<?> type : test.supportedTypes()){
+            DreamCore.DreamVariableTests.put(type, adapter);
+        }
+    }
+
     public static void RegisterPluginMessageListener(JavaPlugin javaPlugin, PluginMessageLibrary pluginMessageListener) {
         var channelName = pluginMessageListener.getChannelName(javaPlugin);
         Bukkit.getMessenger().registerOutgoingPluginChannel(javaPlugin, channelName);
         Bukkit.getMessenger().registerIncomingPluginChannel(javaPlugin, channelName, pluginMessageListener);
         if (Bukkit.getMessenger().isOutgoingChannelRegistered(javaPlugin, channelName)) {
-            DreamChat.SendMessageToConsole(String.format("&8Registered PluginMessageListener: %s on channel %s", pluginMessageListener.getClass().getSimpleName(), channelName), DreamMessageSettings.all());
+            DreamChat.SendMessageToConsole(String.format("&8Registered PluginMessageListener: %s on channel %s",
+                    pluginMessageListener.getClass().getSimpleName(), channelName), DreamMessageSettings.all());
         } else {
             Bukkit.getConsoleSender().sendMessage("Failed to register outgoing channel: " + channelName);
+        }
+    }
+
+    // ============================ ADAPTER ============================
+
+    /// <summary>
+    /// Bridges a <see cref="DreamAbstractVariableTest{T}"/> to the legacy <see cref="DreamVariableTest"/> interface.
+    /// </summary>
+    private static final class VariableTestAdapter implements DreamVariableTest {
+        private final DreamAbstractVariableTest<?> impl;
+
+        private VariableTestAdapter(DreamAbstractVariableTest<?> impl) {
+            this.impl = impl;
+        }
+
+        @Override
+        public com.dreamfirestudios.dreamcore.DreamPersistentData.PersistentDataTypes PersistentDataType() {
+            return impl.persistentType();
+        }
+
+        @Override
+        public boolean IsType(Object variable) {
+            return impl.isType(variable);
+        }
+
+        @Override
+        public List<Class<?>> ClassTypes() {
+            return impl.supportedTypes();
+        }
+
+        @Override
+        public Object SerializeData(Object serializedData) {
+            return impl.serialize(serializedData);
+        }
+
+        @Override
+        public Object DeSerializeData(Object serializedData) {
+            return impl.deserialize(serializedData);
+        }
+
+        @Override
+        public Object ReturnDefaultValue() {
+            return impl.defaultValue();
         }
     }
 }
