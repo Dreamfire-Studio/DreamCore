@@ -1,26 +1,3 @@
-/*
- * MIT License
- *
- * Copyright (c) 2025 Dreamfire Studio
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 package com.dreamfirestudios.dreamcore.DreamChat;
 
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -28,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -38,58 +16,51 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-/// <summary>
-/// Adventure‑first message formatter that supports:
-/// <list type="bullet">
-///   <item><description>MiniMessage parsing (configurable via <see cref="DreamMessageSettings"/>)</description></item>
-///   <item><description>PlaceholderAPI expansion when a <see cref="Player"/> is supplied</description></item>
-///   <item><description>Both <c>String</c> and <see cref="Component"/> inputs/outputs</description></item>
-/// </list>
-/// </summary>
-/// <remarks>
-/// When formatting a <see cref="Component"/> and placeholders are enabled, the formatter serializes to MiniMessage,
-/// applies PlaceholderAPI (if present), sanitizes tags according to settings, and deserializes back.
-/// </remarks>
+/**
+ * Adventure-first formatter for strings and components.
+ *
+ * <p>Pipeline (string input):
+ * PAPI → legacy codes? → bare-hex promotion → sanitize → MiniMessage parse (if enabled).</p>
+ */
 public final class DreamMessageFormatter {
-
     private DreamMessageFormatter() {}
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
-    // Basic scrubbers for when MiniMessage or specific tag families are disabled in settings
-    private static final Pattern COLOR_TAGS = Pattern.compile(
-            "</?#[0-9a-fA-F]{6}>|</?color(?:\\s*:\\s*#[0-9a-fA-F]{6})?>|</?gradient(?:\\s*:[^>]+)?>|</?rainbow(?:\\s*:[^>]+)?>"
-    );
-    private static final Pattern FORMAT_TAGS = Pattern.compile(
-            "</?(bold|b|italic|i|underlined|u|strikethrough|st|obfuscated|obf)>"
-    );
-    private static final Pattern ACTION_TAGS = Pattern.compile(
-            "</?click(?:\\s*:[^>]+)?>|</?hover(?:\\s*:[^>]+)?>"
-    );
+    /** Strip patterns when settings disallow a tag family. */
+    private static final Pattern COLOR_TAGS  = Pattern.compile("</?#[0-9a-fA-F]{6}>|</?color(?:\\s*:\\s*#[0-9a-fA-F]{6})?>|</?gradient(?:\\s*:[^>]+)?>|</?rainbow(?:\\s*:[^>]+)?>");
+    private static final Pattern FORMAT_TAGS = Pattern.compile("</?(bold|b|italic|i|underlined|u|strikethrough|st|obfuscated|obf)>");
+    private static final Pattern ACTION_TAGS = Pattern.compile("</?click(?:\\s*:[^>]+)?>|</?hover(?:\\s*:[^>]+)?>");
+
+    /** QoL: detect bare hex (#RRGGBB) and wrap with MiniMessage color. */
+    private static final Pattern BARE_HEX    = Pattern.compile("(?i)#[0-9a-f]{6}");
+
+    /** Detect legacy Bukkit codes (&/§ + color/format) so we can translate them. */
+    private static final Pattern LEGACY_CODE = Pattern.compile("(?i)(?:&|§)[0-9A-FK-OR]");
 
     // ---------------------------------------------------------------------
-    // Public API — String -> Component
+    // String -> Component
     // ---------------------------------------------------------------------
 
-    /// <summary>
-    /// Formats a raw string to an Adventure <see cref="Component"/> using settings.
-    /// </summary>
-    /// <param name="message">Raw message (MiniMessage or plain).</param>
-    /// <param name="settings">Formatting controls (null uses <c>DreamMessageSettings.all()</c>).</param>
-    /// <returns>Formatted component (never null).</returns>
+    /**
+     * Format a raw string to a {@link Component}.
+     */
     public static @NotNull Component format(@Nullable String message,
                                             @Nullable DreamMessageSettings settings) {
         return format(message, null, settings);
     }
 
-    /// <summary>
-    /// Formats a raw string with optional PlaceholderAPI expansion for the given player.
-    /// </summary>
-    /// <param name="message">Raw message (MiniMessage or plain).</param>
-    /// <param name="player">Player context for PAPI (optional).</param>
-    /// <param name="settings">Formatting controls (null uses <c>DreamMessageSettings.all()</c>).</param>
-    /// <param name="resolvers">Optional MiniMessage tag resolvers.</param>
-    /// <returns>Formatted component (never null).</returns>
+    /**
+     * Format a raw string to a {@link Component} with optional PAPI + resolvers.
+     *
+     * <p>Order:
+     * <ol>
+     *   <li>PAPI expansion (if enabled)</li>
+     *   <li>Legacy translation if legacy codes found</li>
+     *   <li>Bare-hex promotion</li>
+     *   <li>Sanitize and parse with MiniMessage (if enabled)</li>
+     * </ol>
+     */
     public static @NotNull Component format(@Nullable String message,
                                             @Nullable Player player,
                                             @Nullable DreamMessageSettings settings,
@@ -98,12 +69,25 @@ public final class DreamMessageFormatter {
         final DreamMessageSettings s = nonNull(settings);
 
         String processed = message;
+
+        // 1) PlaceholderAPI expansion first so placeholders can introduce color codes too.
         if (s.usePlaceholders() && player != null && isPapiAvailable()) {
             processed = PlaceholderAPI.setPlaceholders(player, processed);
         }
 
+        // 2) If we detect legacy codes (&/§), translate via Legacy serializer.
+        if (LEGACY_CODE.matcher(processed).find()) {
+            // Supports &x§ hex style and standard &/§ colors/formats.
+            return LegacyComponentSerializer.legacyAmpersand().deserialize(processed);
+        }
+
+        // 3) QoL: promote bare “#RRGGBB” to MiniMessage color.
+        if (s.allowColors()) {
+            processed = BARE_HEX.matcher(processed).replaceAll(m -> "<" + m.group() + ">");
+        }
+
+        // 4) MiniMessage path or plain text fallback.
         if (!s.allowMiniMessage()) {
-            // Sanitization strips MiniMessage tags if disallowed; then emit as plain text.
             processed = sanitize(processed, s);
             return Component.text(processed);
         }
@@ -115,13 +99,7 @@ public final class DreamMessageFormatter {
         return MM.deserialize(processed, resolver);
     }
 
-    /// <summary>
-    /// Formats a raw string with optional PlaceholderAPI expansion for the given player.
-    /// </summary>
-    /// <param name="message">Raw message (MiniMessage or plain).</param>
-    /// <param name="player">Player context for PAPI (optional).</param>
-    /// <param name="settings">Formatting controls (null uses <c>DreamMessageSettings.all()</c>).</param>
-    /// <returns>Formatted component (never null).</returns>
+    /** Overload without resolvers. */
     public static @NotNull Component format(@Nullable String message,
                                             @Nullable Player player,
                                             @Nullable DreamMessageSettings settings) {
@@ -129,30 +107,20 @@ public final class DreamMessageFormatter {
     }
 
     // ---------------------------------------------------------------------
-    // Public API — Component -> Component
+    // Component -> Component
     // ---------------------------------------------------------------------
 
-    /// <summary>
-    /// Pass‑through formatting for a <see cref="Component"/>. If MiniMessage is disabled, the component is returned as‑is.
-    /// If placeholders are enabled and a player is provided, we serialize to MiniMessage, apply PAPI, sanitize, and
-    /// deserialize back into a new Component to preserve formatting.
-    /// </summary>
-    /// <param name="component">Input component (may be pre‑built elsewhere).</param>
-    /// <param name="settings">Formatting controls (null uses <c>DreamMessageSettings.all()</c>).</param>
-    /// <returns>Formatted component (never null).</returns>
+    /**
+     * Pass-through for components (PAPI only applicable if we round-trip through MiniMessage).
+     */
     public static @NotNull Component format(@Nullable Component component,
                                             @Nullable DreamMessageSettings settings) {
         return format(component, null, settings, TagResolver.empty());
     }
 
-    /// <summary>
-    /// Full control formatting for a <see cref="Component"/> with PAPI and MiniMessage resolvers.
-    /// </summary>
-    /// <param name="component">Input component.</param>
-    /// <param name="player">Player context for PAPI (optional).</param>
-    /// <param name="settings">Formatting controls (null uses <c>DreamMessageSettings.all()</c>).</param>
-    /// <param name="resolvers">Optional MiniMessage tag resolvers.</param>
-    /// <returns>Formatted component (never null).</returns>
+    /**
+     * Full-control component formatting (PAPI + resolvers).
+     */
     public static @NotNull Component format(@Nullable Component component,
                                             @Nullable Player player,
                                             @Nullable DreamMessageSettings settings,
@@ -160,37 +128,27 @@ public final class DreamMessageFormatter {
         if (component == null) return Component.empty();
         final DreamMessageSettings s = nonNull(settings);
 
-        // If no MiniMessage or no placeholders are needed, return as-is (minor optimization).
+        // If we don't need MiniMessage or PAPI, keep as-is.
         if (!s.allowMiniMessage() && !(s.usePlaceholders() && player != null && isPapiAvailable())) {
             return component;
         }
 
-        // Serialize to MiniMessage so PAPI & sanitization operate on a string representation.
         String mm = MM.serialize(component);
-
         if (s.usePlaceholders() && player != null && isPapiAvailable()) {
             mm = PlaceholderAPI.setPlaceholders(player, mm);
         }
-
         mm = sanitize(mm, s);
 
         final TagResolver resolver = (resolvers != null && resolvers.length > 0)
                 ? TagResolver.resolver(resolvers)
                 : TagResolver.empty();
-
         return MM.deserialize(mm, resolver);
     }
 
     // ---------------------------------------------------------------------
-    // Helpers — presentation utilities
+    // Presentation helpers (unchanged API)
     // ---------------------------------------------------------------------
 
-    /// <summary>
-    /// Centers a string to a given width using spaces (monospaced display assumption).
-    /// </summary>
-    /// <param name="message">Input string.</param>
-    /// <param name="width">Target width in characters.</param>
-    /// <returns>Centered string or <c>null</c> if input was <c>null</c>.</returns>
     public static @Nullable String centerMessage(@Nullable String message, int width) {
         if (message == null) return null;
         final int w = Math.max(width, message.length());
@@ -198,49 +156,25 @@ public final class DreamMessageFormatter {
         final int left = pad / 2;
         final int right = pad - left;
         return " ".repeat(left) + message + " ".repeat(right);
-        // For proportional fonts, consider pixel-width centering instead.
     }
 
-    /// <summary>
-    /// Centers a <see cref="Component"/> by converting to plain text, centering, then returning as plain text.
-    /// </summary>
-    /// <param name="component">Input component.</param>
-    /// <param name="width">Target width in characters.</param>
-    /// <returns>Centered plain‑text component.</returns>
     public static @NotNull Component centerMessage(@NotNull Component component, int width) {
         final String plain = PlainTextComponentSerializer.plainText().serialize(component);
         final String centered = centerMessage(plain, width);
         return Component.text(centered == null ? "" : centered);
     }
 
-    /// <summary>
-    /// Truncates a string to <paramref name="maxLen"/> characters and appends ellipsis when needed.
-    /// </summary>
-    /// <param name="message">Input string.</param>
-    /// <param name="maxLen">Maximum length.</param>
-    /// <returns>Possibly truncated string; returns <c>"..."</c> for null or non‑positive max.</returns>
     public static @NotNull String limitMessage(@Nullable String message, int maxLen) {
         if (message == null || maxLen <= 0) return "...";
         if (message.length() <= maxLen) return message;
         return message.substring(0, Math.max(0, maxLen)) + "...";
     }
 
-    /// <summary>
-    /// Truncates a component's plain‑text view and returns a plain text component.
-    /// </summary>
-    /// <param name="component">Input component.</param>
-    /// <param name="maxLen">Maximum length.</param>
-    /// <returns>Truncated plain‑text component.</returns>
     public static @NotNull Component limitMessage(@NotNull Component component, int maxLen) {
         final String plain = PlainTextComponentSerializer.plainText().serialize(component);
         return Component.text(limitMessage(plain, maxLen));
     }
 
-    /// <summary>
-    /// Capitalizes every word in a string (simple ASCII rules).
-    /// </summary>
-    /// <param name="message">Input string.</param>
-    /// <returns>Capitalized string; input unchanged if null/empty.</returns>
     public static @Nullable String capitalizeWords(@Nullable String message) {
         if (message == null || message.isEmpty()) return message;
         String[] words = message.split(" ");
@@ -254,36 +188,19 @@ public final class DreamMessageFormatter {
         return sb.toString().trim();
     }
 
-    /// <summary>
-    /// Reverses a string.
-    /// </summary>
-    /// <param name="message">Input string.</param>
-    /// <returns>Reversed string or <c>null</c> if input was <c>null</c>.</returns>
     public static @Nullable String reverseMessage(@Nullable String message) {
         if (message == null) return null;
         return new StringBuilder(message).reverse().toString();
     }
 
     // ---------------------------------------------------------------------
-    // Placeholder helpers
+    // Placeholder helpers (unchanged API)
     // ---------------------------------------------------------------------
 
-    /// <summary>
-    /// Creates an unparsed placeholder (MiniMessage <c>&lt;key&gt;</c> replaced with literal value).
-    /// </summary>
-    /// <param name="key">Placeholder key.</param>
-    /// <param name="value">Literal value (null becomes empty string).</param>
-    /// <returns>Tag resolver for MiniMessage.</returns>
     public static @NotNull TagResolver placeholder(@NotNull String key, @Nullable String value) {
         return Placeholder.unparsed(key, value == null ? "" : value);
     }
 
-    /// <summary>
-    /// Creates a component placeholder (MiniMessage <c>&lt;key&gt;</c> replaced with a component).
-    /// </summary>
-    /// <param name="key">Placeholder key.</param>
-    /// <param name="value">Component value.</param>
-    /// <returns>Tag resolver for MiniMessage.</returns>
     public static @NotNull TagResolver placeholder(@NotNull String key, @NotNull Component value) {
         return Placeholder.component(key, value);
     }
@@ -292,38 +209,19 @@ public final class DreamMessageFormatter {
     // Internals
     // ---------------------------------------------------------------------
 
-    /// <summary>
-    /// Returns whether PlaceholderAPI is available and enabled.
-    /// </summary>
     private static boolean isPapiAvailable() {
         return Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
     }
 
-    /// <summary>
-    /// Returns a non‑null settings instance, defaulting to <see cref="DreamMessageSettings.all()"/>.
-    /// </summary>
     private static @NotNull DreamMessageSettings nonNull(@Nullable DreamMessageSettings s) {
         return Objects.requireNonNullElse(s, DreamMessageSettings.all());
     }
 
-    /// <summary>
-    /// Removes disallowed MiniMessage tags according to settings.
-    /// When MiniMessage is disabled, this prevents obvious tag leakage when outputting as plain text.
-    /// </summary>
-    /// <param name="input">Input MiniMessage string.</param>
-    /// <param name="s">Active settings.</param>
-    /// <returns>Sanitized MiniMessage/Plain string.</returns>
     private static @NotNull String sanitize(@NotNull String input, @NotNull DreamMessageSettings s) {
         String out = input;
-        if (!s.allowColors()) {
-            out = COLOR_TAGS.matcher(out).replaceAll("");
-        }
-        if (!s.allowFormatting()) {
-            out = FORMAT_TAGS.matcher(out).replaceAll("");
-        }
-        if (!s.allowClickAndHover()) {
-            out = ACTION_TAGS.matcher(out).replaceAll("");
-        }
+        if (!s.allowColors())        out = COLOR_TAGS.matcher(out).replaceAll("");
+        if (!s.allowFormatting())    out = FORMAT_TAGS.matcher(out).replaceAll("");
+        if (!s.allowClickAndHover()) out = ACTION_TAGS.matcher(out).replaceAll("");
         return out;
     }
 }
