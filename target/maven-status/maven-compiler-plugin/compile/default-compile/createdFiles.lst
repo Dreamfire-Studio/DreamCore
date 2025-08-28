@@ -67,6 +67,7 @@ com\dreamfirestudios\dreamcore\DreamLocationLimiter\DreamLocationLimiter$1.class
 com\dreamfirestudios\dreamcore\DreamTimer\TimerPausedEvent.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\StorageObjectRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamStopwatch\StopwatchStoppedEvent.class
+com\dreamfirestudios\dreamcore\DreamVariable\DreamEnumVariableTest.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\ArmorStandSlot.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\DreamBlockMask.class
 com\dreamfirestudios\dreamcore\DreamPrompt\PromptRestartEvent.class
@@ -159,6 +160,7 @@ com\dreamfirestudios\dreamcore\DreamInventory\DreamInventory.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBarData.class
 com\dreamfirestudios\dreamcore\DreamVariable\DreamVariableTestAPI.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskStartedEvent.class
+com\dreamfirestudios\dreamcore\DreamConcurrent\DreamKeyedRateLimiter$Bucket.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\BlockMaskStoppedEvent.class
 com\dreamfirestudios\dreamcore\DreamJava\DreamClassID.class
 com\dreamfirestudios\dreamcore\DreamStopwatch\DreamStopwatch.class
@@ -186,12 +188,14 @@ com\dreamfirestudios\dreamcore\DreamPrompt\PromptStartedEvent.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamfireArmorStandBuilder.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarStopped.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarData.class
+com\dreamfirestudios\dreamcore\DreamConcurrent\DreamKeyedRateLimiter.class
 com\dreamfirestudios\dreamcore\DreamWorld\DreamWorld.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\SmartInvsPlugin.class
 com\dreamfirestudios\dreamcore\DreamBossBar\DreamBossBar$Builder.class
 com\dreamfirestudios\dreamcore\DreamRecipe\RecipeType.class
 com\dreamfirestudios\dreamcore\DreamTextDisplay\DreamTextDisplay$TextDisplayBuilder.class
 com\dreamfirestudios\dreamcore\DreamTimer\TimerTickEvent.class
+com\dreamfirestudios\dreamcore\DreamConcurrent\DreamTaskFence.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterType.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStoppedEvent.class
 com\dreamfirestudios\dreamcore\DreamCore.class
@@ -209,6 +213,7 @@ com\dreamfirestudios\dreamcore\DreamLoop\IDreamLoop.class
 com\dreamfirestudios\dreamcore\DreamBlockMask\DreamBlockMask$Builder.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\DreamBlockDisplay.class
 com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStartedEvent.class
+com\dreamfirestudios\dreamcore\DreamConcurrent\DreamCooldownMap.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\DreamfireStorageManager.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStand.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\content\InventoryContents$Impl.class
