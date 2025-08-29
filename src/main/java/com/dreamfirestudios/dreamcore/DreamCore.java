@@ -36,6 +36,7 @@ import com.dreamfirestudios.dreamcore.DreamFakeBlock.DreamFakeBlock;
 import com.dreamfirestudios.dreamcore.DreamHologram.DreamHologram;
 import com.dreamfirestudios.dreamcore.DreamItems.IDreamItemStack;
 import com.dreamfirestudios.dreamcore.DreamJava.DreamClassAPI;
+import com.dreamfirestudios.dreamcore.DreamKeyPressed.*;
 import com.dreamfirestudios.dreamcore.DreamLocationLimiter.DreamLocationLimiter;
 import com.dreamfirestudios.dreamcore.DreamLoop.IDreamLoop;
 import com.dreamfirestudios.dreamcore.DreamPlaceholder.DreamPlaceholderManager;
@@ -64,6 +65,7 @@ public class DreamCore extends JavaPlugin {
     public static DreamPlaceholderManager DreamPlaceholderManager;
     public static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager DreamfireStorageManager;
     public static SmartInvsPlugin SmartInvsPlugin;
+    public static IDreamKeyManager IDreamKeyManager;
 
     public static final LinkedHashMap<UUID, DreamActionBar> DreamActionBars = new LinkedHashMap<>();
     public static final LinkedHashMap<Class<?>, DreamVariableTest> DreamVariableTests = new LinkedHashMap<>();
@@ -80,20 +82,20 @@ public class DreamCore extends JavaPlugin {
     public static final LinkedHashMap<UUID, IDreamLoop> IDreamLoops = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, Conversation> Conversations = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, DreamScoreboard> DreamScoreboards = new LinkedHashMap<>();
-    public static final ArrayList<DreamStopwatch> DreamStopWatchs = new ArrayList<>();
-    public static final ArrayList<DreamTeleport> DreamTeleports = new ArrayList<>();
     public static final LinkedHashMap<UUID, DreamWorld> DreamWorlds = new LinkedHashMap<>();
     public static final ArrayList<IDreamItemStack> IDreamItemStacks = new ArrayList<>();
-
-    public static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager GetDreamfireStorageManager(){return DreamfireStorageManager;}
+    public static final ArrayList<IDreamKeyPressed> DreamKeyPressedListeners = new ArrayList<>();
+    public static final ArrayList<IDreamKeyPatternSpec> DreamKeyPatternSpecs = new ArrayList<>();
 
     @Override
     public void onEnable() {
         DreamCore = this;
         LuckPerms = LuckPermsProvider.get();
+        IDreamKeyManager = new DreamKeyManager();
         ProtocolManager = ProtocolLibrary.getProtocolManager();
         DreamPlaceholderManager = new DreamPlaceholderManager("dreamcore", "Dreamfire Studios", "1.0.0");
         SmartInvsPlugin = new SmartInvsPlugin(this);
+        getServer().getPluginManager().registerEvents(new DreamKeyBukkitAdapter(IDreamKeyManager), this);
         DreamClassAPI.RegisterClasses(this);
     }
 
@@ -113,6 +115,7 @@ public class DreamCore extends JavaPlugin {
         for(var dreamfireFakeBlock : DreamFakeBlocks.values()) dreamfireFakeBlock.displayNextFrame();
         for(var dreamfireScoreBoard : DreamScoreboards.values()) dreamfireScoreBoard.displayNextFrame();
         for(var dreamfireWorld : DreamWorlds.values()) dreamfireWorld.TickWorld();
+        IDreamKeyManager.tick();
     }
 
     public void TwentyTickClasses(){

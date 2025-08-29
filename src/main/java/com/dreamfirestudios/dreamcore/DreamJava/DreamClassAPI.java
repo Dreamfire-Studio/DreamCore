@@ -30,6 +30,8 @@ import com.dreamfirestudios.dreamcore.DreamCore;
 import com.dreamfirestudios.dreamcore.DreamEnchantment.IDreamEnchantment;
 import com.dreamfirestudios.dreamcore.DreamHologram.DreamHologram; // retained even if unused by compiler settings
 import com.dreamfirestudios.dreamcore.DreamItems.IDreamItemStack;
+import com.dreamfirestudios.dreamcore.DreamKeyPressed.IDreamKeyPatternSpec;
+import com.dreamfirestudios.dreamcore.DreamKeyPressed.IDreamKeyPressed;
 import com.dreamfirestudios.dreamcore.DreamLoop.IDreamLoop;
 import com.dreamfirestudios.dreamcore.DreamMessagingChannel.PluginMessageLibrary;
 import com.dreamfirestudios.dreamcore.DreamPlaceholder.IDreamPlaceholder;
@@ -76,11 +78,11 @@ public final class DreamClassAPI {
         registrationActions.put(IDreamPlaceholder.class, (plugin, instance) -> RegisterPulsePlaceholder(plugin, (IDreamPlaceholder) instance));
         registrationActions.put(IDreamItemStack.class, (plugin, instance) -> RegisterIDreamItemStack(plugin, (IDreamItemStack) instance));
         registrationActions.put(IDreamRecipe.class, (plugin, instance) -> RegisterPulseRecipe(plugin, (IDreamRecipe) instance));
-        // Legacy variable tests
         registrationActions.put(DreamVariableTest.class, (plugin, instance) -> RegisterPulseVariableTest(plugin, (DreamVariableTest) instance));
-        // New variable tests (generic)
         registrationActions.put(DreamAbstractVariableTest.class, (plugin, instance) -> RegisterPulseVariableTest(plugin, (DreamAbstractVariableTest<?>) instance));
         registrationActions.put(PluginMessageLibrary.class, (plugin, instance) -> RegisterPluginMessageListener(plugin, (PluginMessageLibrary) instance));
+        registrationActions.put(IDreamKeyPressed.class, (plugin, instance) -> RegisterDreamKeyPressed(plugin, (IDreamKeyPressed) instance));
+        registrationActions.put(IDreamKeyPatternSpec.class, (plugin, instance) -> RegisterDreamKeyPattern(plugin, (IDreamKeyPatternSpec) instance));
     }
 
     /// <summary>Registers all discovered classes (wrapped exceptions).</summary>
@@ -92,15 +94,13 @@ public final class DreamClassAPI {
     }
 
     /// <summary>Registers all discovered classes (propagates reflection errors).</summary>
-    public static void RegisterClassesRaw(JavaPlugin javaPlugin)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static void RegisterClassesRaw(JavaPlugin javaPlugin) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         try {
             for (var autoRegisterClass : DreamfireJavaAPI.getAutoRegisterClasses(javaPlugin)) {
                 for (var entry : registrationActions.entrySet()) {
                     if (entry.getKey().isAssignableFrom(autoRegisterClass)) {
                         Object instance = autoRegisterClass.getConstructor().newInstance();
                         entry.getValue().accept(javaPlugin, instance);
-                        break; // first match wins
                     }
                 }
             }
@@ -111,6 +111,35 @@ public final class DreamClassAPI {
     }
 
     // ============================ REGISTRATIONS ============================
+
+    // inside DreamClassAPI.java — ADD these two methods
+    /**
+     * <summary>Registers a key-pattern listener (lifecycle callbacks only).</summary>
+     * <remarks>
+     * Stored for later consumption by the key-input manager (not implemented yet).
+     * </remarks>
+     */
+    public static void RegisterDreamKeyPressed(JavaPlugin javaPlugin, IDreamKeyPressed listener) {
+        var list = com.dreamfirestudios.dreamcore.DreamCore.DreamKeyPressedListeners;
+        if (!list.contains(listener)) {
+            list.add(listener);
+            DreamChat.SendMessageToConsole(String.format("&8Registered DreamKeyPressed listener: %s", listener.getClass().getSimpleName()), DreamMessageSettings.all());
+        }
+    }
+
+    /**
+     * <summary>Registers a key-pattern specification (definition only).</summary>
+     * <remarks>
+     * Manager can pair these with listeners or allow implementors to implement both interfaces in one class.
+     * </remarks>
+     */
+    public static void RegisterDreamKeyPattern(JavaPlugin javaPlugin, IDreamKeyPatternSpec spec) {
+        var list = com.dreamfirestudios.dreamcore.DreamCore.DreamKeyPatternSpecs;
+        if (!list.contains(spec)) {
+            list.add(spec);
+            DreamChat.SendMessageToConsole(String.format("&8Registered DreamKeyPattern spec: %s", spec.getClass().getSimpleName()), DreamMessageSettings.all());
+        }
+    }
 
     public static void RegisterPulseLoop(JavaPlugin javaPlugin, IDreamLoop iDreamLoop){
         iDreamLoop.Start();
