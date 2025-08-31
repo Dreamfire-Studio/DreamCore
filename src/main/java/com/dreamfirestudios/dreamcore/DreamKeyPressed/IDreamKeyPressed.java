@@ -58,13 +58,13 @@ public interface IDreamKeyPressed {
     default DreamPressedType dreamPressedType() { return DreamPressedType.InOrder; }
 
     /// <summary>Called when a step completes (index of the step just completed).</summary>
-    default void PartialComplete(int index) {}
+    default void PartialComplete(UUID playerId, int index) {}
 
     /// <summary>Called when a pattern fails (timing/conditions/sequence mismatch).</summary>
-    default void FailedAction() {}
+    default void FailedAction(UUID playerId) {}
 
     /// <summary>Called when a pattern successfully completes.</summary>
-    default void ActionComplete() {}
+    default void ActionComplete(UUID playerId) {}
 
     /// <summary>Called periodically to update remaining window for current step or spread.</summary>
     default void TimeWindowUpdate(UUID playerId, Duration remaining, Duration total, int stepIndex) {}

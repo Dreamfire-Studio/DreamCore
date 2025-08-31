@@ -175,7 +175,7 @@ public final class DreamClassAPI {
     }
 
     public static void RegisterIDreamItemStack(JavaPlugin javaPlugin, IDreamItemStack def){
-        DreamCore.IDreamItemStacks.add(def);
+        DreamCore.IDreamItemStacks.put(def.id(), def);
         DreamChat.SendMessageToConsole(String.format("&8Registered IDreamItemStack: %s", def.getClass().getSimpleName()), DreamMessageSettings.all());
     }
 

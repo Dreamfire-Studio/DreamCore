@@ -2,24 +2,6 @@
  * MIT License
  *
  * Copyright (c) 2025 Dreamfire Studio
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
  */
 package com.dreamfirestudios.dreamcore.DreamKeyPressed;
 
@@ -42,43 +24,41 @@ import java.time.Instant;
  * <remarks>
  * <ul>
  *   <li>Listens to player movement, inventory, and interaction events.</li>
- *   <li>Ensures inputs are normalized into a single {@link DreamPressedKeys} stream.</li>
+ *   <li>Normalizes inputs into a single {@link DreamPressedKeys} stream.</li>
  *   <li>Auto-registers {@link IDreamKeyPressed} specs from {@code DreamCore.DreamKeyPatternSpecs} on join.</li>
  *   <li>Removes all player bindings on quit to avoid leaks.</li>
+ *   <li>Right-click echo: if the player is <em>currently sneaking</em> and performs a RIGHT_CLICK with the main hand,
+ *       a synthetic {@link DreamPressedKeys#SNEAK} is emitted at the same timestamp to support AllAtOnce chords.</li>
  * </ul>
  * </remarks>
  * <example>
- * Registering the adapter in a plugin:
+ * Registering the adapter:
  * <code>
- * public class MyPlugin extends JavaPlugin {
+ * public final class MyPlugin extends JavaPlugin {
  *     private DreamKeyBukkitAdapter adapter;
- *
- *     @Override
- *     public void onEnable() {
- *         IDreamKeyManager manager = new DreamKeyManagerImpl();
+ *     @Override public void onEnable() {
+ *         IDreamKeyManager manager = new DreamKeyManager();
  *         adapter = new DreamKeyBukkitAdapter(manager);
  *         getServer().getPluginManager().registerEvents(adapter, this);
  *     }
  * }
  * </code>
- *
- * <para>
- * With this setup, pressing <c>SNEAK + SPRINT</c> could be detected by
- * key patterns you’ve registered in {@code DreamCore.DreamKeyPatternSpecs}.
- * </para>
  * </example>
  */
 public final class DreamKeyBukkitAdapter implements Listener {
 
     private final IDreamKeyManager manager;
 
-    /// <summary>Constructs the adapter with a key manager.</summary>
-    /// <param name="manager">Manager responsible for handling key inputs and patterns.</param>
+    /**
+     * <summary>Constructs the adapter with a key manager.</summary>
+     * <param name="manager">Manager responsible for handling key inputs and patterns.</param>
+     */
     public DreamKeyBukkitAdapter(final IDreamKeyManager manager) {
         this.manager = manager;
     }
 
     // --- Movement ---
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
     public void onSneak(PlayerToggleSneakEvent e) {
         if (e.isSneaking()) feed(e.getPlayer(), DreamPressedKeys.SNEAK);
@@ -90,6 +70,7 @@ public final class DreamKeyBukkitAdapter implements Listener {
     }
 
     // --- Inventory / Hotbar ---
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
     public void onInventoryOpen(InventoryOpenEvent e) {
         if (e.getPlayer() instanceof Player p) feed(p, DreamPressedKeys.INVENTORY_OPEN);
@@ -108,6 +89,7 @@ public final class DreamKeyBukkitAdapter implements Listener {
             case 6 -> feed(p, DreamPressedKeys.HOTBAR_7);
             case 7 -> feed(p, DreamPressedKeys.HOTBAR_8);
             case 8 -> feed(p, DreamPressedKeys.HOTBAR_9);
+            default -> { /* no-op */ }
         }
     }
 
@@ -122,22 +104,48 @@ public final class DreamKeyBukkitAdapter implements Listener {
     }
 
     // --- Clicks ---
+
+    /**
+     * <summary>
+     * Normalizes left/right click to {@link DreamPressedKeys} and forwards to the manager.
+     * If the player is currently sneaking and performs a RIGHT_CLICK with the main hand,
+     * a synthetic {@link DreamPressedKeys#SNEAK} is also emitted at the same timestamp.
+     * </summary>
+     * <remarks>
+     * Processes only {@link EquipmentSlot#HAND} to avoid double-firing with off-hand.
+     * The sneak echo is intentionally limited to RIGHT_CLICK to minimize side-effects.
+     * </remarks>
+     * <param name="e">Bukkit player interaction event.</param>
+     */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
     public void onInteract(PlayerInteractEvent e) {
-        // IMPORTANT: Only process MAIN hand to avoid double fire (main + off-hand)
-        if (e.getHand() != EquipmentSlot.HAND) return;
+        final Action action = e.getAction();
 
-        Player p = e.getPlayer();
-        Action a = e.getAction();
+        EquipmentSlot hand = e.getHand();
+        if (hand == null) hand = EquipmentSlot.HAND;
 
-        if (a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK) {
-            feed(p, DreamPressedKeys.LEFT_CLICK);
-        } else if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
-            feed(p, DreamPressedKeys.RIGHT_CLICK);
+        final boolean isBlockClick = action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK;
+        if (isBlockClick && hand == EquipmentSlot.OFF_HAND) return;
+
+        final Player p = e.getPlayer();
+        final Instant ts = Instant.now();
+
+        if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+            feed(p, DreamPressedKeys.LEFT_CLICK, ts);
+            if (p.isSneaking()) {
+                feed(p, DreamPressedKeys.SNEAK, ts);
+            }
+            return;
+        }
+
+        if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+            feed(p, DreamPressedKeys.RIGHT_CLICK, ts);
+            if (p.isSneaking()) {
+                feed(p, DreamPressedKeys.SNEAK, ts);
+            }
         }
     }
 
-    // --- Auto-bind pattern specs on join / cleanup on quit ---
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         var playerId = e.getPlayer().getUniqueId();
@@ -153,12 +161,24 @@ public final class DreamKeyBukkitAdapter implements Listener {
         manager.unregisterAll(e.getPlayer().getUniqueId());
     }
 
-    /// <summary>
-    /// Helper to feed a translated key press into the manager.
-    /// </summary>
-    /// <param name="p">Player who pressed the key.</param>
-    /// <param name="key">The normalized {@link DreamPressedKeys} enum value.</param>
+    // --- Helpers ---
+
+    /**
+     * <summary>Helper to feed a translated key press into the manager.</summary>
+     * <param name="p">Player who pressed the key.</param>
+     * <param name="key">The normalized {@link DreamPressedKeys} enum value.</param>
+     */
     private void feed(Player p, DreamPressedKeys key) {
         manager.handleInput(p, key, Instant.now());
+    }
+
+    /**
+     * <summary>Helper to feed a translated key press into the manager with an explicit timestamp.</summary>
+     * <param name="p">Player who pressed the key.</param>
+     * <param name="key">Normalized key enum.</param>
+     * <param name="at">Timestamp to forward to the manager (kept consistent for chords).</param>
+     */
+    private void feed(Player p, DreamPressedKeys key, Instant at) {
+        manager.handleInput(p, key, at);
     }
 }

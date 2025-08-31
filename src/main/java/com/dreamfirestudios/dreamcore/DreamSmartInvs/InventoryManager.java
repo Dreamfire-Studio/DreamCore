@@ -126,21 +126,14 @@ public class InventoryManager {
         public void onInventoryClick(InventoryClickEvent e) {
             Player p = (Player) e.getWhoClicked();
 
-            Bukkit.getConsoleSender().sendMessage(NamedTextColor.RED + "looking for inventory");
-
             if (!inventories.containsKey(p.getUniqueId()))
                 return;
 
             Inventory clickedInventory = e.getClickedInventory();
             SmartInventory smartInventory = inventories.get(p.getUniqueId());
 
-            // Restrict putting items from the bottom inventory into the top inventory
-
-            Bukkit.getConsoleSender().sendMessage(NamedTextColor.RED + "checking is bottom clickable");
             if(!smartInventory.getBottomClickable()){
-                Bukkit.getConsoleSender().sendMessage(NamedTextColor.RED + "checking Is bottom ivnentory");
                 if (clickedInventory == p.getOpenInventory().getBottomInventory()) {
-                    Bukkit.getConsoleSender().sendMessage(NamedTextColor.RED + "Is bottom ivnentory");
                     if (e.getAction() == InventoryAction.COLLECT_TO_CURSOR || e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
                         int slot = e.getSlot();
                         if(!smartInventory.getClickableTiles().contains(slot)) e.setCancelled(true);
@@ -154,10 +147,8 @@ public class InventoryManager {
                 }
             }
 
-            Bukkit.getConsoleSender().sendMessage(NamedTextColor.RED + "checking top ivnentory");
             if (clickedInventory == p.getOpenInventory().getTopInventory()) {
                 int slot = e.getSlot();
-                Bukkit.getConsoleSender().sendMessage(NamedTextColor.RED + "Is top ivnentory");
                 if(!smartInventory.getClickableTiles().contains(slot)){
                     e.setCancelled(true);
 
@@ -172,7 +163,6 @@ public class InventoryManager {
                     if (row >= inv.getRows() || column >= inv.getColumns())
                         return;
 
-                    Bukkit.getConsoleSender().sendMessage(NamedTextColor.RED + "FIRE CLICK");
                     inv.getListeners().stream()
                             .filter(listener -> listener.getType() == InventoryClickEvent.class)
                             .forEach(listener -> ((InventoryListener<InventoryClickEvent>) listener).accept(e));

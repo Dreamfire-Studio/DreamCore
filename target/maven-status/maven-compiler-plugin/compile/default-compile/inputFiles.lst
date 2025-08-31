@@ -71,6 +71,8 @@ E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\drea
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStartedEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskStoppedEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamEntityMask\EntityMaskType.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamEvent\DreamPlayerMoveEvent.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamEvent\DreamPlayerMoveSeedListener.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamFakeBlock\DreamFakeBlock.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamFakeBlock\DreamFakeBlockAPI.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamFakeBlock\FakeBlockClearedEvent.java
@@ -98,6 +100,7 @@ E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\drea
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamItemDisplay\DreamItemDisplay.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamItemDisplay\ItemDisplaySpawnEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamItems\DreamItemStacks.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamItems\DreamItemStacksAPI.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamItems\IDreamItemStack.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamJava\DreamClassAPI.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamJava\DreamClassID.java
@@ -147,6 +150,7 @@ E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\drea
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamPersistentData\PersistentItemStackRemovedEvent.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamPlaceholder\DreamPlaceholderManager.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamPlaceholder\IDreamPlaceholder.java
+E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamPlayerMoveMonitor.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\DreamPrompt.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\DreamPromptTriplet.java
 E:\Coding Portfolio\Dreamfire Studios\DreamCore\DreamCore\src\main\java\com\dreamfirestudios\dreamcore\DreamPrompt\IDreamPrompt.java

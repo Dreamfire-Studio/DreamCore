@@ -102,7 +102,9 @@ com\dreamfirestudios\dreamcore\DreamRaycast\DreamRaycast$RaycastHit.class
 com\dreamfirestudios\dreamcore\DreamActionBar\DreamActionBarPlayerRemoved.class
 com\dreamfirestudios\dreamcore\DreamBook\DreamBookCloseEvent.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\content\Pagination.class
+com\dreamfirestudios\dreamcore\DreamPlayerMoveMonitor.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\content\SlotIterator$Impl.class
+com\dreamfirestudios\dreamcore\DreamItems\DreamItemStacksAPI.class
 com\dreamfirestudios\dreamcore\DreamJava\PulseAutoRegister.class
 com\dreamfirestudios\dreamcore\DreamBlockDisplay\BlockDisplayPool.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStand$1.class
@@ -121,6 +123,7 @@ com\dreamfirestudios\dreamcore\DreamBossBar\BossBarPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamTimer\DreamTimer.class
 com\dreamfirestudios\dreamcore\DreamHologram\HologramUpdateEvent.class
 com\dreamfirestudios\dreamcore\DreamVariable\DreamVariableTest.class
+com\dreamfirestudios\dreamcore\DreamEvent\DreamPlayerMoveEvent.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterPlayerRemovedEvent.class
 com\dreamfirestudios\dreamcore\DreamCam\CamPathPlayerAddedEvent.class
 com\dreamfirestudios\dreamcore\DreamHologram\DreamHologram$HologramBuilder.class
@@ -241,6 +244,7 @@ com\dreamfirestudios\dreamcore\DreamConcurrent\DreamCooldownMap.class
 com\dreamfirestudios\dreamcore\DreamfireStorage\DreamfireStorageManager.class
 com\dreamfirestudios\dreamcore\DreamArmorStand\DreamArmorStand.class
 com\dreamfirestudios\dreamcore\DreamSmartInvs\content\InventoryContents$Impl.class
+com\dreamfirestudios\dreamcore\DreamEvent\DreamPlayerMoveSeedListener.class
 com\dreamfirestudios\dreamcore\DreamTextDisplay\DreamTextDisplay.class
 com\dreamfirestudios\dreamcore\DreamKeyPressed\IDreamTimingSpec.class
 com\dreamfirestudios\dreamcore\DreamLocationLimiter\LocationLimiterLimitHit.class

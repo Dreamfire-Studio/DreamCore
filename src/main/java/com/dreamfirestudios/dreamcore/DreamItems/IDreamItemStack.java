@@ -58,14 +58,7 @@ import java.util.*;
 /// </code>
 /// </example>
 public interface IDreamItemStack {
-
-    /* ------------------ Identity ------------------ */
-
-    /// <summary>
-    /// Optional stable ID. If present, it is written to PDC for reliable matching.
-    /// </summary>
-    /// <returns>Optional ID string.</returns>
-    default Optional<String> id() { return Optional.empty(); }
+    String id();
 
     /// <summary>
     /// Display name (Adventure). Return <c>null</c> to keep the vanilla name.

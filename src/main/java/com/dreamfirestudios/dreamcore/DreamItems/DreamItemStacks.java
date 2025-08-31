@@ -131,7 +131,10 @@ public final class DreamItemStacks {
 
         // PDC
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        def.id().ifPresent(id -> pdc.set(keyId(plugin), PersistentDataType.STRING, id));
+        String id = def.id();
+        if (id != null && !id.isBlank()) {
+            pdc.set(keyId(plugin), PersistentDataType.STRING, id);
+        }
         def.writePdc(plugin, pdc);
 
         stack.setItemMeta(meta);
@@ -206,16 +209,16 @@ public final class DreamItemStacks {
     /// Optional&lt;IDreamItemStack&gt; def = DreamItemStacks.resolveById(plugin, stack, ALL_DEFS);
     /// </code>
     /// </example>
-    public static Optional<IDreamItemStack> resolveById(
-            Plugin plugin,
-            ItemStack stack,
-            Collection<IDreamItemStack> registry
-    ) {
+    public static Optional<IDreamItemStack> resolveById(Plugin plugin, ItemStack stack, Collection<IDreamItemStack> registry) {
         Optional<String> id = readId(plugin, stack);
         if (id.isEmpty()) return Optional.empty();
         String key = id.get();
         for (IDreamItemStack def : registry) {
-            if (def != null && def.id().isPresent() && def.id().get().equals(key)) return Optional.of(def);
+            if (def == null) continue;
+            String defId = def.id();
+            if (defId != null && defId.equals(key)) {
+                return Optional.of(def);
+            }
         }
         return Optional.empty();
     }

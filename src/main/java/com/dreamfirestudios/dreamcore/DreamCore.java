@@ -32,6 +32,7 @@ import com.dreamfirestudios.dreamcore.DreamBossBar.DreamBossBar;
 import com.dreamfirestudios.dreamcore.DreamCam.DreamCamPath;
 import com.dreamfirestudios.dreamcore.DreamEnchantment.IDreamEnchantment;
 import com.dreamfirestudios.dreamcore.DreamEntityMask.DreamEntityMask;
+import com.dreamfirestudios.dreamcore.DreamEvent.DreamPlayerMoveEvent;
 import com.dreamfirestudios.dreamcore.DreamFakeBlock.DreamFakeBlock;
 import com.dreamfirestudios.dreamcore.DreamHologram.DreamHologram;
 import com.dreamfirestudios.dreamcore.DreamItems.IDreamItemStack;
@@ -65,6 +66,7 @@ public class DreamCore extends JavaPlugin {
     public static DreamPlaceholderManager DreamPlaceholderManager;
     public static com.dreamfirestudios.dreamcore.DreamfireStorage.DreamfireStorageManager DreamfireStorageManager;
     public static SmartInvsPlugin SmartInvsPlugin;
+    public static DreamPlayerMoveMonitor DreamPlayerMoveMonitor;
     public static IDreamKeyManager IDreamKeyManager;
 
     public static final LinkedHashMap<UUID, DreamActionBar> DreamActionBars = new LinkedHashMap<>();
@@ -83,7 +85,7 @@ public class DreamCore extends JavaPlugin {
     public static final LinkedHashMap<UUID, Conversation> Conversations = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, DreamScoreboard> DreamScoreboards = new LinkedHashMap<>();
     public static final LinkedHashMap<UUID, DreamWorld> DreamWorlds = new LinkedHashMap<>();
-    public static final ArrayList<IDreamItemStack> IDreamItemStacks = new ArrayList<>();
+    public static final LinkedHashMap<String, IDreamItemStack> IDreamItemStacks = new LinkedHashMap<>();
     public static final ArrayList<IDreamKeyPressed> DreamKeyPressedListeners = new ArrayList<>();
     public static final ArrayList<IDreamKeyPatternSpec> DreamKeyPatternSpecs = new ArrayList<>();
 
@@ -95,6 +97,7 @@ public class DreamCore extends JavaPlugin {
         ProtocolManager = ProtocolLibrary.getProtocolManager();
         DreamPlaceholderManager = new DreamPlaceholderManager("dreamcore", "Dreamfire Studios", "1.0.0");
         SmartInvsPlugin = new SmartInvsPlugin(this);
+        DreamPlayerMoveMonitor = new DreamPlayerMoveMonitor(this);
         getServer().getPluginManager().registerEvents(new DreamKeyBukkitAdapter(IDreamKeyManager), this);
         DreamClassAPI.RegisterClasses(this);
     }
@@ -124,6 +127,7 @@ public class DreamCore extends JavaPlugin {
         for(var blockMask : DreamBlockMasks.values()) blockMask.displayNextFrame();
         for(var dreamfireEntityMask : DreamEntityMasks.values()) dreamfireEntityMask.displayNextFrame();
         for(var dreamfireHologram : DreamHolograms.values()) dreamfireHologram.displayNextFrame();
+        DreamPlayerMoveMonitor.tick();
     }
 
 
