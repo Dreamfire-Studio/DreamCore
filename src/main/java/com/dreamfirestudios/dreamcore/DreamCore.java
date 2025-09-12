@@ -96,6 +96,7 @@ public class DreamCore extends JavaPlugin {
         IDreamKeyManager = new DreamKeyManager();
         ProtocolManager = ProtocolLibrary.getProtocolManager();
         DreamPlaceholderManager = new DreamPlaceholderManager("dreamcore", "Dreamfire Studios", "1.0.0");
+        DreamPlaceholderManager.register();
         SmartInvsPlugin = new SmartInvsPlugin(this);
         DreamPlayerMoveMonitor = new DreamPlayerMoveMonitor(this);
         getServer().getPluginManager().registerEvents(new DreamKeyBukkitAdapter(IDreamKeyManager), this);

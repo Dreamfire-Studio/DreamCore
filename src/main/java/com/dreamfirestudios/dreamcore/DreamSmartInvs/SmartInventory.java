@@ -39,42 +39,31 @@ public class SmartInventory {
         return open(player, 0);
     }
     public CompletableFuture<Inventory> open(Player player, int page) {
-        // Ensure the old inventory closure and cleanup runs first
         Optional<SmartInventory> oldInv = this.manager.getInventory(player);
 
-        if (oldInv.isPresent()) {
-            SmartInventory inv = oldInv.get();
-            Bukkit.getScheduler().runTask(DreamCore.DreamCore, () -> {
-                inv.getListeners().stream()
-                        .filter(listener -> listener.getType() == InventoryCloseEvent.class)
-                        .forEach(listener -> ((InventoryListener<InventoryCloseEvent>) listener)
-                                .accept(new InventoryCloseEvent(player.getOpenInventory())));
+        // Clean up old inventory without forcing client flicker
+        oldInv.ifPresent(inv -> {
+            inv.getListeners().stream()
+                    .filter(listener -> listener.getType() == InventoryCloseEvent.class)
+                    .forEach(listener -> ((InventoryListener<InventoryCloseEvent>) listener)
+                            .accept(new InventoryCloseEvent(player.getOpenInventory())));
+            this.manager.setInventory(player, null);
+            this.manager.setContents(player, null);
+        });
 
-                this.manager.setInventory(player, null); // Clear the current inventory
-            });
-        }
-
-        // Setup the new contents
+        // Setup new contents
         InventoryContents contents = new InventoryContents.Impl(this, player.getUniqueId());
         contents.pagination().page(page);
-
         this.manager.setContents(player, contents);
 
-        // Continue with provider initialization and opening the inventory
+        // Initialise + open
         return this.provider.init(player, contents).thenApplyAsync(v -> {
             try {
-                // Check if contents are consistent
-                if (!this.manager.getContents(player).equals(Optional.of(contents))) {
-                    return null;
-                }
+                this.manager.setInventory(player, this);
 
-                // Open the new inventory
                 InventoryOpener opener = this.manager.findOpener(type)
-                        .orElseThrow(() -> new IllegalStateException("No opener found for the inventory type " + type.name()));
-                Inventory handle = opener.open(this, player);
-
-                this.manager.setInventory(player, this); // Set the new inventory
-                return handle;
+                        .orElseThrow(() -> new IllegalStateException("No opener found for type " + type));
+                return opener.open(this, player);
             } catch (Exception e) {
                 this.manager.handleInventoryOpenError(this, player, e);
                 return null;

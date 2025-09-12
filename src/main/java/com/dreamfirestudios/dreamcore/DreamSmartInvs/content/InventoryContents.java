@@ -247,11 +247,21 @@ public interface InventoryContents {
 
         private void update(int row, int column, ItemStack item) {
             Player currentPlayer = Bukkit.getPlayer(player);
-            if(!inv.getManager().getOpenedPlayers(inv).contains(currentPlayer))
-                return;
-
+            if (currentPlayer == null) return;
+            if (!inv.getManager().getOpenedPlayers(inv).contains(currentPlayer)) return;
             Inventory topInventory = currentPlayer.getOpenInventory().getTopInventory();
-            topInventory.setItem(inv.getColumns() * row + column, item);
+
+            int expectedSize = inv.getRows() * inv.getColumns();
+            if (topInventory.getSize() != expectedSize) {
+                return;
+            }
+
+            int slotIndex = inv.getColumns() * row + column;
+            if (slotIndex >= topInventory.getSize() || slotIndex < 0) {
+                return;
+            }
+
+            topInventory.setItem(slotIndex, item);
         }
 
     }
